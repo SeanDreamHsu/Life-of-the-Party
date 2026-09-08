@@ -1,0 +1,242 @@
+@import "tailwindcss";
+
+/*
+ * Game palette. Every terrain kind gets a base shade and an `-alt` shade;
+ * TileCell alternates between them on (x + y) % 2 to get the checkerboard
+ * that reads as pixel-art floor tiling.
+ */
+@theme {
+  /* ---- the HUD's own palette: stained wood, brass, bone, oxblood ---- */
+  --color-shell: #0d0a09;
+  --color-ink: #17110e;
+  --color-plate: #241a15;
+  --color-plate-hi: #3a2a20;
+  --color-brass: #c8a24a;
+  --color-brass-dim: #7d6229;
+  --color-bone: #ece0c8;
+  --color-bone-dim: #a2937a;
+  --color-oxblood: #8f2323;
+  --color-oxblood-hi: #c94a3a;
+  --color-moss: #7d9a52;
+
+  /* Kept for the terrain generators, which reference them by name. */
+  --color-panel: #241a15;
+  --color-panel-line: #7d6229;
+
+  --color-yard: #4c7a37;
+  --color-yard-alt: #558540;
+  --color-living: #7a5638;
+  --color-living-alt: #855f3f;
+  --color-kitchen: #61697a;
+  --color-kitchen-alt: #6a7383;
+  --color-wall: #2b2521;
+  --color-door: #b8823f;
+}
+
+/* min-height, not height: a fixed 100% clips anything taller than the viewport
+   instead of letting the page scroll — which hid half the sprite sheet. */
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  /* The app is a fixed full-screen surface; nothing should scroll behind it. */
+  overflow: hidden;
+  background-color: var(--color-shell);
+  color: var(--color-bone);
+  /* A real book face. Georgia first, with old-style siblings behind it so the
+     UI still reads as printed matter on machines that lack it. */
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * IDLE LIFE
+ *
+ * Nobody on this board is ever perfectly still. Each guest gets a negative
+ * animation-delay derived from their id, so five people breathing at the same
+ * rate never breathe in unison — synchronised idles are the single biggest tell
+ * that a crowd is a sprite array rather than a party.
+ *
+ * The animation escalates with the mutation stage: a sway becomes a slump,
+ * becomes a twitch, becomes a jitter.
+ */
+@keyframes idle-breathe {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50%      { transform: translateY(-2%) scaleY(1.02); }
+}
+
+@keyframes idle-sway {
+  0%, 100% { transform: translateY(0) rotate(-1.6deg); }
+  50%      { transform: translateY(-3%) rotate(1.6deg); }
+}
+
+@keyframes idle-twitch {
+  0%, 62%, 100% { transform: translate(0, 0) rotate(0deg); }
+  66%           { transform: translate(-3%, -1%) rotate(-3deg); }
+  70%           { transform: translate(2%, 0) rotate(2deg); }
+  74%           { transform: translate(0, -2%) rotate(-1deg); }
+}
+
+@keyframes idle-jitter {
+  0%, 100% { transform: translate(0, 0) rotate(-2.5deg) scaleY(1); }
+  25%      { transform: translate(2%, -3%) rotate(2deg) scaleY(1.03); }
+  50%      { transform: translate(-2%, 0) rotate(-3deg) scaleY(0.98); }
+  75%      { transform: translate(1%, -2%) rotate(3deg) scaleY(1.02); }
+}
+
+/* Bigger, faster, on the beat. Anyone near a live speaker does this. */
+@keyframes dance {
+  0%, 100% { transform: translateY(0) rotate(-7deg) scaleY(0.96); }
+  50%      { transform: translateY(-14%) rotate(7deg) scaleY(1.05); }
+}
+
+/* Mood bubbles rise and fade in place. */
+@keyframes emote-float {
+  0%       { transform: translateY(10%) scale(0.7); opacity: 0; }
+  18%      { transform: translateY(0) scale(1); opacity: 1; }
+  82%      { transform: translateY(-10%) scale(1); opacity: 1; }
+  100%     { transform: translateY(-22%) scale(0.9); opacity: 0; }
+}
+
+/* Party lights wash the whole HUD faintly when the music is on. */
+@keyframes party-pulse {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.4; }
+}
+
+.anim-breathe { animation: idle-breathe 3.4s ease-in-out infinite; }
+.anim-sway    { animation: idle-sway 2.8s ease-in-out infinite; }
+.anim-twitch  { animation: idle-twitch 2.2s ease-in-out infinite; }
+.anim-jitter  { animation: idle-jitter 0.9s ease-in-out infinite; }
+.anim-dance   { animation: dance 0.46s ease-in-out infinite; }
+.anim-emote   { animation: emote-float 3.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-breathe, .anim-sway, .anim-twitch, .anim-jitter, .anim-dance, .anim-emote {
+    animation: none;
+  }
+}
+
+/*
+ * THE HUD IS FURNITURE
+ *
+ * Not floating translucent cards. Every panel is a stained-wood plate screwed
+ * to the screen: hard corners, a brass rule, a lit top bevel and a dark bottom
+ * one, sitting on its own shadow. The grain is a repeating gradient rather than
+ * an image so it costs nothing and never tiles visibly.
+ *
+ * Deliberately avoided: backdrop blur, generous uniform radii, and the
+ * letter-spaced micro-caps that make an interface look like a settings screen.
+ */
+.plate {
+  position: relative;
+  background:
+    repeating-linear-gradient(
+      92deg,
+      rgba(255, 255, 255, 0.022) 0px,
+      rgba(255, 255, 255, 0.022) 1px,
+      transparent 1px,
+      transparent 5px
+    ),
+    linear-gradient(176deg, var(--color-plate-hi) 0%, var(--color-plate) 42%, #1b120e 100%);
+  border: 1px solid var(--color-brass-dim);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(226, 190, 120, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.65),
+    0 10px 26px rgba(0, 0, 0, 0.7);
+}
+
+/* A hairline of brass just inside the frame — the detail that reads as made. */
+.plate::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(200, 162, 74, 0.16);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* Section headings: small caps, not shouty tracked-out uppercase. */
+.legend {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--color-brass);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Brass double rule under a heading. */
+.rule {
+  border: 0;
+  height: 3px;
+  background:
+    linear-gradient(var(--color-brass-dim), var(--color-brass-dim)) top / 100% 1px no-repeat,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) bottom / 100% 1px no-repeat;
+}
+
+/* The engraved title sign. */
+.signplate {
+  background: linear-gradient(176deg, #43301f 0%, #2a1c12 60%, #170f0a 100%);
+  border: 1px solid var(--color-brass-dim);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(226, 190, 120, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.7),
+    0 10px 26px rgba(0, 0, 0, 0.75);
+}
+
+/* Buttons are pressed metal, and they move when you press them. */
+.brassbtn {
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: #2a1c0c;
+  background: linear-gradient(180deg, #efd489 0%, #c8a24a 45%, #9c7a2e 100%);
+  border: 1px solid #6a5220;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.75),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.35),
+    0 3px 0 #5d4718,
+    0 6px 12px rgba(0, 0, 0, 0.6);
+  transition: transform 90ms ease, box-shadow 90ms ease, filter 120ms ease;
+}
+.brassbtn:hover { filter: brightness(1.08); }
+.brassbtn:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 200, 0.5),
+    inset 0 2px 5px rgba(0, 0, 0, 0.5),
+    0 0 0 #5d4718,
+    0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.brassbtn:disabled {
+  filter: grayscale(0.7) brightness(0.6);
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+  cursor: wait;
+}
+
+/* Small ghost button for secondary controls. */
+.ghostbtn {
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: var(--color-bone-dim);
+  background: linear-gradient(180deg, rgba(58, 42, 32, 0.95), rgba(23, 17, 14, 0.95));
+  border: 1px solid var(--color-brass-dim);
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(226, 190, 120, 0.16), 0 4px 10px rgba(0, 0, 0, 0.6);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.ghostbtn:hover { color: var(--color-bone); border-color: var(--color-brass); }
+
+/* Sunken wells: gauges and portrait frames sit in a hole, not on a surface. */
+.well {
+  background: #120c09;
+  border: 1px solid #0a0706;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), inset 0 -1px 0 rgba(226, 190, 120, 0.1);
+}

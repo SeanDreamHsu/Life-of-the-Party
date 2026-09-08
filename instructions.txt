@@ -1,0 +1,91 @@
+Core Identity
+Concept: A non-lethal, turn-based survival strategy game. Your house party has gone on for days, and your guests are slowly mutating into hungover, destructive zombies.
+
+Visual Style: 2D top-down pixel art, utilizing a "dollhouse" cutaway view of the home (similar to Stardew Valley).
+
+Win Condition: Safely usher all mutating guests out of your home.
+
+Fail Condition: The Suspicion Meter maxes out (authorities arrive), or you critically injure/kill a guest.
+
+Game Mechanics & Turn Cycle
+The gameplay loop operates on an asynchronous turn queue where planning and execution are split.
+
+The Planning Phase (Player)
+You have a limited pool of Action Points (AP) per turn to manipulate the environment or interact with guests. Actions are queued up and can be undone before committing.
+
+Environmental Manipulation: Toggle lights, move speakers, lock doors, or place food lures.
+
+Direct Interaction: Offer a to-go box, gently nudge a guest, or forcefully push them (costs more AP, risks injury).
+
+The Resolution Phase (Engine)
+Upon clicking "End Turn," the state arrays update simultaneously.
+
+AI Pathfinding: Guest sprites evaluate the new board state and move toward their highest priority stimulus based on their mutation stage and hidden preferences.
+
+Undertale-Style Text Log: The bottom of the screen generates narrative text explaining the simulation results (e.g., "Gary ignored the nachos and kicked the TV," "Denise wandered onto the front lawn").
+
+
+
+The Pressure Systems
+You are balancing three hidden or explicit resources to prevent the situation from spiraling.SystemTrigger/DrainConsequenceSuspicion MeterLoud noises, broken furniture, mutated guests lingering visibly in the front yard.Fills up over time. Reaching 100% triggers a Game Over via police/neighbor intervention.Pantry ReserveConstantly drains as guests raid the kitchen.Once empty, guests become aggressive, damaging the house or fighting each other, which spikes Suspicion.Mutation TimerAdvances passively as the days/turns progress.Guests shift from harmlessly annoying to actively destructive, changing their AI pathing priorities.
+
+Guest AI & Behavior
+Rather than scripted events, guests act as independent agents evaluating environmental tags. Testing these overlapping logic states will be an excellent use case for a multi-agent environment like Google Antigravity before locking in the final behavior trees.
+
+Hidden Lures: Each guest spawns with distinct likes/dislikes (e.g., drawn to heavy bass, hates bright lights, easily distracted by pizza). The player must deduce these through trial and error.
+
+Agitation Levels: Using the wrong lure or aggressively pushing a guest increases their agitation. High agitation leads to property damage (noise) or unpredictable pathing.
+
+Development Roadmap
+Phase 1: Web Prototype. Build the logic, UI, state arrays, and turn queue using React, TypeScript, and Vite. This allows for rapid hot-reloading to dial in the AP economy and AI behavior without fighting an engine's physics system.
+
+Phase 2: Commercial Build. Migrate the proven logic over to Godot. Rely on Godot's native 2D tilemaps and GDScript to execute the final pixel-perfect Steam release.
+
+
+----
+
+Instructions
+
+You are an expert game developer and systems architect. We are building a web-based prototype for a top-down, turn-based strategy game called "Life of the Party." The objective is to safely usher mutating zombie-guests out of a house without killing them, using environmental lures while managing an Action Point (AP) economy and a Suspicion Meter.
+
+Use React, TypeScript, Vite, and Tailwind CSS. Write clean, modular components and strictly type all state arrays. Execute this project in four distinct phases. Wait for my confirmation after completing each phase before moving to the next.
+
+Phase 1: State Architecture & Grid Scaffold
+
+Initialize a Vite + React + TS project.
+
+Define the core TypeScript interfaces: Tile (x, y, isPassable, hasDoor), Guest (id, x, y, mutationStage, hiddenLure, agitationLevel), and Interactable (id, type, x, y, state).
+
+Create a 10x10 grid representing a basic living room and front yard. Render this grid using Tailwind CSS for layout.
+
+Place 3 Guest sprites (represented by simple colored squares/emojis) and 2 Interactable objects (e.g., a speaker and a fridge) on the grid.
+
+Phase 2: The Player Phase (Input & UI)
+
+Implement a top UI bar tracking: Day/Turn Counter, Action Points (3 per turn), and a Suspicion Meter (0-100%).
+
+Create the pending action queue. When the player clicks an adjacent grid tile or object, display a small interaction menu (e.g., "Place Snack", "Toggle Light", "Push Guest").
+
+Deduct AP when an action is queued. Allow the player to undo queued actions before ending the turn.
+
+Create an "End Turn" button that locks inputs and transitions the game state to the Resolution Phase.
+
+Phase 3: The Entity Phase (AI & Pathfinding)
+
+Build the resolution logic triggered by "End Turn."
+
+Process the player's queued environmental changes first.
+
+Calculate AI pathfinding: Write a function where each Guest evaluates the board. If their specific hiddenLure (e.g., loud music) is active, they move 1 tile toward it. If not, they wander randomly or path toward the kitchen.
+
+Animate or snap the guests to their new grid coordinates simultaneously.
+
+Phase 4: Feedback & The Consequence Engine
+
+Implement an Undertale-style text log component at the bottom of the screen.
+
+During the Entity Phase calculation, push text strings to this log based on events (e.g., "Gary shuffled toward the garage," "Denise knocked over a lamp.").
+
+Apply Suspicion Meter penalties if guests are outside the house (yard tiles) or if loud actions were taken.
+
+Trigger a simple "Game Over" overlay if the Suspicion Meter hits 100%, or a "Night Survived" overlay if the grid is cleared of all guests.
