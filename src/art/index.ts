@@ -17,7 +17,7 @@ import { PROPS, type PropId } from './sprites/catalog';
 import { EMOTES, EMOTE_SIZE, type EmoteId } from './sprites/emotes';
 import { FOOD, type FoodId } from './sprites/food';
 import { FURNITURE } from './sprites/furniture';
-import { GUEST_POSES } from './sprites/people';
+import { CHARACTER_LOOKS, characterGrid, GUEST_POSES, type CharacterFrame, type CharacterDirection } from './sprites/people';
 import type { Guest, MutationStage, TileKind } from '../types/game';
 
 export type { FoodId, PropId, PropId as FurnitureId, EmoteId };
@@ -31,27 +31,26 @@ export interface Art {
 }
 
 /**
- * A guest's art is their stage's pose plus their personal palette. The cache
+ * A guest's art combines their identity, stage, gait and palette. The cache
  * key folds in the stage because the palette shifts as they rot — without it,
  * a mutating guest would keep rendering with their stage-0 colours.
  */
-export function guestArt(guest: Guest): Art {
-  const skin = GUEST_SKINS[guest.id] ?? DEFAULT_SKIN;
+export function guestArt(guest: Guest, frame: CharacterFrame = 'idle', direction: CharacterDirection = 'front'): Art {
+  return personArt(guest.id, guest.mutationStage, frame, direction);
+}
+
+export function personArt(id: string, stage: MutationStage, frame: CharacterFrame = 'idle', direction: CharacterDirection = 'front'): Art {
+  const skin = id === 'host' ? HOST_SKIN : GUEST_SKINS[id] ?? DEFAULT_SKIN;
   return {
-    cacheKey: `guest:${guest.id}:${guest.mutationStage}`,
-    grid: GUEST_POSES[guest.mutationStage],
-    palette: guestPalette(skin, guest.mutationStage),
+    cacheKey: `person:${id}:${stage}:${frame}:${direction}`,
+    grid: characterGrid(id, stage, frame, direction),
+    palette: guestPalette(skin, stage),
   };
 }
 
-/** Art for a bare pose, used by the gallery to show stages side by side. */
+/** Gallery portraits share the exact art used by the board. */
 export function poseArt(guestId: string, stage: MutationStage): Art {
-  const skin = GUEST_SKINS[guestId] ?? DEFAULT_SKIN;
-  return {
-    cacheKey: `guest:${guestId}:${stage}`,
-    grid: GUEST_POSES[stage],
-    palette: guestPalette(skin, stage),
-  };
+  return personArt(guestId, stage);
 }
 
 export function furnitureArt(id: PropId): Art {
@@ -116,8 +115,15 @@ export function foodArt(id: FoodId): Art {
 export function auditAllSprites(): string[] {
   const problems: string[] = [];
 
-  for (const [stage, grid] of Object.entries(GUEST_POSES)) {
-    problems.push(...validate(`pose:${stage}`, grid, guestPalette(DEFAULT_SKIN, 0)));
+  for (const id of Object.keys(CHARACTER_LOOKS)) {
+    for (const stage of [0, 1, 2, 3] as const) {
+      for (const frame of ['idle', 'blink', 'step-a', 'step-b', 'dance-a', 'dance-b'] as const) {
+        for (const direction of ['front', 'back'] as const) {
+          const art = personArt(id, stage, frame, direction);
+          problems.push(...validate(art.cacheKey, art.grid, art.palette));
+        }
+      }
+    }
   }
   for (const [id, grid] of Object.entries(PROPS)) {
     problems.push(...validate(`prop:${id}`, grid, OBJECT_PALETTE));
@@ -140,9 +146,5 @@ export function auditAllSprites(): string[] {
 
 /** The host avatar. Always drawn upright — you have not started turning. */
 export function hostArt(): Art {
-  return {
-    cacheKey: 'host',
-    grid: GUEST_POSES[0],
-    palette: guestPalette(HOST_SKIN, 0),
-  };
+  return personArt('host', 0);
 }

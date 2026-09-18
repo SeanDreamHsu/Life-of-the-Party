@@ -28,7 +28,7 @@ export default function ActionQueue({ queue, minutes, budget, onUndo, onClear }:
     >
       {queue.length === 0 ? (
         <p className="py-1 text-[0.8rem] leading-snug text-bone-dim italic">
-          Click a tile beside you to plan something.
+          Use WASD or arrow keys to plan a move (1 min per tile), or click a tile beside you.
         </p>
       ) : (
         <>

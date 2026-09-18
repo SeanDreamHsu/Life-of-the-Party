@@ -176,7 +176,7 @@ const CHAPTERS: Chapter[] = [
     id: 'situation',
     tab: 'The house',
     title: 'It is hour fifty-two',
-    standfirst: 'Five people are still in your house, and they are not getting better.',
+    standfirst: 'Twelve people are still in your house, and they are not getting better.',
     body: (
       <div className="space-y-3">
         <Lede>
@@ -211,6 +211,12 @@ const CHAPTERS: Chapter[] = [
             </p>
           </div>
         </div>
+
+        <p className="text-[0.82rem] leading-snug text-bone-dim">
+          Choose Ground Floor, Upper Floor or Basement in the floor panel to look around.
+          Each floor sits above the same footprint. To travel, walk onto a staircase and
+          press its “Take stairs” button. The trip costs one minute and can be undone.
+        </p>
 
         <Aside>
           This is not a game about beating people out of a house. It is a game about arranging a
@@ -530,7 +536,7 @@ const CHAPTERS: Chapter[] = [
     body: (
       <div className="space-y-3">
         <Body>
-          Opening night, five guests, nothing switched on. Here is an opening that costs you almost
+          Opening night, twelve guests, nothing switched on. Here is an opening that costs you almost
           nothing and tells you almost everything.
         </Body>
 

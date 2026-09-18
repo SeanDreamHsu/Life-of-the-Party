@@ -1,5 +1,7 @@
 import { GRID_HEIGHT, GRID_WIDTH } from '../data/houseMap';
-import { ROOMS, WINGS, roomById, wingBounds, type Room, type WingId } from '../data/rooms';
+import { ROOMS, WINGS, roomAt, roomById, wingBounds, type Room, type WingId } from '../data/rooms';
+import { floorAt, floorNeighbours } from '../data/floors';
+import type { Grid } from '../types/game';
 
 /**
  * THE CAMERA
@@ -35,6 +37,16 @@ export interface Camera {
 
 export const WHOLE_LOT: Camera = { level: 'lot', wingId: null, roomId: null };
 
+/** Door thresholds borrow an adjacent room; outdoors uses the floor overview. */
+export function cameraAtHost(grid: Grid, host: { x: number; y: number }): Camera {
+  const floor = floorAt(host.x, host.y);
+  const room = roomAt(host.x, host.y) ?? floorNeighbours(grid, host)
+    .filter(point => floorAt(point.x, point.y) === floor)
+    .map(point => roomAt(point.x, point.y)).find(candidate => candidate && candidate.wing !== 'grounds');
+  return room && room.wing !== 'grounds'
+    ? { level: 'room', wingId: room.wing, roomId: room.id } : WHOLE_LOT;
+}
+
 export interface Focus {
   x: number;
   y: number;
@@ -47,7 +59,7 @@ export interface Focus {
  * its walls flush against the screen edge and reads as cropped rather than
  * framed.
  */
-const PADDING: Record<CameraLevel, number> = { lot: 0, wing: 1, room: 2 };
+const PADDING: Record<CameraLevel, number> = { lot: 0, wing: 1, room: 1 };
 
 function padded(rect: Focus, level: CameraLevel): Focus {
   const pad = PADDING[level];

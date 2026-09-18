@@ -1,5 +1,6 @@
 import { DECORATIONS } from './decorations';
 import { FURNITURE } from './furniture';
+import { ROOM_PIECES } from './roomPieces';
 import { RUGS } from './rugs';
 
 /**
@@ -12,6 +13,7 @@ export const PROPS = {
   ...FURNITURE,
   ...DECORATIONS,
   ...RUGS,
+  ...ROOM_PIECES,
 } as const;
 
 export type PropId = keyof typeof PROPS;

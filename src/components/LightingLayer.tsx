@@ -1,3 +1,4 @@
+import { FLOOR_VIEW } from '../data/floors';
 import { useEffect, useRef } from 'react';
 import { GRID_HEIGHT, GRID_WIDTH } from '../data/houseMap';
 import { moonlight, type LightSource } from '../game/lights';
@@ -6,7 +7,7 @@ import { moonlight, type LightSource } from '../game/lights';
 const LIGHT_SCALE = 12;
 
 /** How dark an unlit room gets. Enough to feel like night, not so dark the art dies. */
-const NIGHT = 'rgba(6, 8, 22, 0.78)';
+const NIGHT = 'rgba(13, 16, 31, 0.52)';
 
 interface LightingLayerProps {
   lights: readonly LightSource[];
@@ -46,6 +47,7 @@ export default function LightingLayer({ lights, partyMode }: LightingLayerProps)
 
     let raf = 0;
     const started = performance.now();
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     function pool(
       source: LightSource,
@@ -99,7 +101,7 @@ export default function LightingLayer({ lights, partyMode }: LightingLayerProps)
 
     function frame(now: number): void {
       if (!ctx) return;
-      const t = (now - started) / 1000;
+      const t = reducedMotion.matches ? 0 : (now - started) / 1000;
       const { lights: sources, partyMode: party } = latest.current;
 
       ctx.globalCompositeOperation = 'source-over';
@@ -107,7 +109,7 @@ export default function LightingLayer({ lights, partyMode }: LightingLayerProps)
       ctx.fillStyle = NIGHT;
       ctx.fillRect(0, 0, width, height);
 
-      const all: LightSource[] = [moonlight(GRID_WIDTH, GRID_HEIGHT), ...sources];
+      const all: LightSource[] = [moonlight(FLOOR_VIEW.w, FLOOR_VIEW.h), ...sources];
 
       // Pass one: cut the darkness away where light falls.
       ctx.globalCompositeOperation = 'destination-out';

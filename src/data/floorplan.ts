@@ -20,19 +20,21 @@ import type { TileKind } from '../types/game';
  *
  * ── THE LAYOUT ───────────────────────────────────────────────────────────────
  *
- *   y 1..8    front   Lounge · Foyer · Dining Room · Kitchen
- *   y 10..11  hall    The Main Hall, running the full width
- *   y 13..20  middle  Ballroom · Study · Theater · Game Room
- *   y 22..23  hall    The Back Landing
- *   y 25..32  back    Master Bedroom · Guest Rooms 1-3 · Bathroom
- *   y 34..38  under   Basement · Rec Room · (something else)
+ * Three 56 × 25 storeys share the same screen origin. The storage atlas uses
+ * y 0..24 for ground, 25..49 for upstairs, and 50..74 for the basement.
+ * Ground: front rooms, main hall, entertaining rooms, back landing.
+ * Upper: bedrooms and bathroom, with a shared rear landing.
+ * Basement: storage, rec room and private room, with a shared rear landing.
+ * Explicit stairs connect the landings; atlas borders are never walkable links.
  *
  * Rooms are separated by exactly one column or row, which becomes their shared
  * wall. Doors are punched into those walls afterwards.
  */
 
 export const BUILDING_WIDTH = 56;
-export const BUILDING_HEIGHT = 40;
+export const BUILDING_HEIGHT = 75;
+/** All three storeys share a 56 × 25 tile footprint. Atlas rows are storage only. */
+export const STOREY_HEIGHT = 25;
 
 /** Which map character draws each floor material. Must match houseMap's LEGEND. */
 const FLOOR_CHAR: Partial<Record<TileKind, string>> = {
@@ -82,7 +84,7 @@ export interface RoomPlan {
   h: number;
 }
 
-export const ROOM_PLAN: readonly RoomPlan[] = [
+const AUTHORED_ROOMS: readonly RoomPlan[] = [
   /* ---------------------------------------------------------------- front */
   {
     id: 'lounge',
@@ -149,7 +151,7 @@ export const ROOM_PLAN: readonly RoomPlan[] = [
   {
     id: 'ballroom',
     name: 'The Ballroom',
-    blurb: 'Built for eighty people. Currently holding the loudest four.',
+    blurb: 'Built for eighty people. The remaining dancers still need all of it.',
     narrative: 'the ballroom',
     floor: 'living',
     wing: 'middle',
@@ -315,6 +317,19 @@ export const ROOM_PLAN: readonly RoomPlan[] = [
   },
 ];
 
+/** Storeys occupy separate atlas bands but render at the same world origin. */
+export const ROOM_PLAN: readonly RoomPlan[] = [
+  ...AUTHORED_ROOMS.map(room => room.wing === 'back'
+    ? { ...room, y: 26, h: 20 }
+    : room.wing === 'under' ? { ...room, y: 51, h: 20 } : room),
+  { id: 'upper-landing', name: 'The Upper Landing', narrative: 'the upper landing',
+    blurb: 'The bedrooms share one landing. The stairs lead back to the party.',
+    floor: 'hall', wing: 'back', x: 1, y: 47, w: 54, h: 2 },
+  { id: 'basement-landing', name: 'The Basement Landing', narrative: 'the basement landing',
+    blurb: 'Up to the party, or out through the quiet walkout.',
+    floor: 'hall', wing: 'under', x: 1, y: 72, w: 54, h: 2 },
+];
+
 export interface Door {
   x: number;
   y: number;
@@ -336,7 +351,8 @@ export const DOORS: readonly Door[] = [
   { x: 24, y: 0, exterior: true },
   // Side door off the main hall, and the basement walkout at the back.
   { x: 0, y: 11, exterior: true },
-  { x: 12, y: 39, exterior: true },
+  { x: 12, y: 74, exterior: true },
+  { x: 12, y: 24, exterior: true },
 
   // Front band down into the main hall.
   { x: 8, y: 9 },
@@ -364,18 +380,19 @@ export const DOORS: readonly Door[] = [
   { x: 39, y: 21 },
   { x: 50, y: 21 },
 
-  // Back landing into the bedrooms.
-  { x: 9, y: 24 },
-  { x: 24, y: 24 },
-  { x: 34, y: 24 },
-  { x: 43, y: 24 },
-  { x: 51, y: 24 },
+  // Upper landing into the bedrooms.
+  { x: 9, y: 46 },
+  { x: 24, y: 46 },
+  { x: 34, y: 46 },
+  { x: 43, y: 46 },
+  { x: 51, y: 46 },
 
-  // The stairs. One way down, through the first guest room.
-  { x: 24, y: 33 },
-  // And the two doors that make up the lower floor.
-  { x: 25, y: 36 },
-  { x: 45, y: 36 },
+  // Basement rooms open onto their shared landing. Stairs live in floors.ts.
+  { x: 12, y: 71 },
+  { x: 35, y: 71 },
+  // Interior connections across the basement.
+  { x: 25, y: 60 },
+  { x: 45, y: 60 },
 ];
 
 /**

@@ -1,8 +1,10 @@
+import { floorNeighbours } from './floors';
 import { PROPS, type PropId } from '../art';
 import { TRANSPARENT, type PixelGrid } from '../art/pixel';
 import { INTERACTABLE_META } from '../types/game';
-import { BUILDING_HEIGHT, BUILDING_WIDTH, HOUSE_MAP, HOUSE_X, HOUSE_Y } from './houseMap';
+import { createInitialGrid, BUILDING_HEIGHT, BUILDING_WIDTH, HOUSE_MAP, HOUSE_X, HOUSE_Y } from './houseMap';
 import { createInitialDecor, createInitialInteractables } from './initialState';
+import { roomAt } from './rooms';
 
 /**
  * LAYOUT AUDIT
@@ -132,6 +134,23 @@ const isDoor = (x: number, y: number): boolean => charAt(x, y) === '+' || charAt
  */
 export function auditLayout(): string[] {
   const problems: string[] = [];
+
+  // Floor textiles have their own native dimensions. Validate their full area,
+  // not the old 2x2 prop box, so a large runner cannot silently cross a wall.
+  for (const item of createInitialDecor()) {
+    if (!item.floorSize) continue;
+    const [width, height] = item.floorSize;
+    if (!UNDER.has(item.art) || item.blocking || !Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
+      problems.push(`layout: ${item.id} has invalid floor textile dimensions or collision`);
+      continue;
+    }
+    const room = roomAt(item.x, item.y);
+    const left = item.x + 0.5 - width / 2;
+    const top = item.y + 0.5 - height / 2;
+    if (!room || left < room.x || top < room.y || left + width > room.x + room.w || top + height > room.y + room.h) {
+      problems.push(`layout: ${item.id} extends beyond its room`);
+    }
+  }
 
   const pieces: Piece[] = [
     ...createInitialDecor().map((d) => ({
@@ -276,18 +295,12 @@ function auditReachability(pieces: Piece[]): string[] {
     queue.push([x, 0]);
   }
 
+  const grid = createInitialGrid();
   while (queue.length > 0) {
     const next = queue.shift();
     if (next === undefined) break;
     const [x, y] = next;
-    for (const [dx, dy] of [
-      [0, 1],
-      [0, -1],
-      [1, 0],
-      [-1, 0],
-    ] as const) {
-      const nx = x + dx;
-      const ny = y + dy;
+    for (const { x: nx, y: ny } of floorNeighbours(grid, { x, y })) {
       const key = `${nx},${ny}`;
       if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
       if (seen.has(key) || blocked.has(key)) continue;

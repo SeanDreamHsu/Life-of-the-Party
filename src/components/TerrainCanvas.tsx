@@ -4,6 +4,7 @@ import { paintInto } from '../art/pixel';
 import { TERRAIN_SIZE } from '../art/terrain';
 import { GRID_HEIGHT, GRID_WIDTH } from '../data/houseMap';
 import type { Grid } from '../types/game';
+import { floorPoint, visibleOnFloor, type FloorId } from '../data/floors';
 
 /**
  * The whole floor, composited onto one canvas.
@@ -14,7 +15,7 @@ import type { Grid } from '../types/game';
  * kept at native pixel size (16px per tile) and stretched by CSS with
  * nearest-neighbour, so it stays sharp at any zoom.
  */
-export default function TerrainCanvas({ grid }: { grid: Grid }) {
+export default function TerrainCanvas({ grid, floor }: { grid: Grid; floor?: FloorId }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -32,12 +33,14 @@ export default function TerrainCanvas({ grid }: { grid: Grid }) {
     const image = ctx.createImageData(width, height);
     for (const row of grid) {
       for (const tile of row) {
+        if (floor && !visibleOnFloor(tile, floor)) continue;
         const art = terrainArt(tile.kind, tile.x, tile.y);
-        paintInto(image, art.grid, art.palette, tile.x * TERRAIN_SIZE, tile.y * TERRAIN_SIZE);
+        const position = floor ? floorPoint(tile) : tile;
+        paintInto(image, art.grid, art.palette, position.x * TERRAIN_SIZE, position.y * TERRAIN_SIZE);
       }
     }
     ctx.putImageData(image, 0, 0);
-  }, [grid]);
+  }, [grid, floor]);
 
   return (
     <canvas
