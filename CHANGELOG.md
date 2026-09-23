@@ -11,6 +11,19 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Docs
+
+- **`CHARACTERS.md`**, a character bible for all twelve guests, the host and the
+  room nobody knows about: backstories, relationships, running jokes and
+  per-guest play tips, built on top of the canon in `cast.ts`. Each guest's
+  hidden lure sits behind a collapsed spoiler, so the doc can be read without
+  spoiling the deduction loop. Where it and `cast.ts` disagree, `cast.ts` wins.
+- The README's *Guests* section links to it.
+
+---
+
 ## [0.7.5] — 2026-09-07 — *first tagged release*
 
 The first version published to version control. Everything below describes the

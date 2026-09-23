@@ -92,6 +92,11 @@ happened to them. Two rules held throughout that file:
 2. **Every character is funny in a way that is also a little sad.** That is what
    makes a player want to *know* them rather than just clear them.
 
+Who they actually *are* (backstories, relationships and the running jokes
+between them) is written up in [CHARACTERS.md](CHARACTERS.md). Every hidden lure
+in there is folded behind a spoiler, so it can be read without giving the
+deduction away.
+
 Each guest carries:
 
 - **`hiddenLure`** — `bass`, `food`, `light`, or `quiet`. What they are secretly
