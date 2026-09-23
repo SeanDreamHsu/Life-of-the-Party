@@ -11,6 +11,20 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **A landing page** at `landing/`, built as a second Vite entry. Every sprite,
+  action cost, bark and opening mutation stage on it is read from `src/`, not
+  restated. It includes a playable sixty-minute hour, a lure-deduction lab (the
+  demo guest's lure is dealt at random, so the page never spoils the real one),
+  a scroll-driven mutation sequence and a sprite drawn live from its source
+  text. Animation is anime.js v4; `prefers-reduced-motion` is honoured
+  throughout.
+
+---
+
 ## [0.7.5] — 2026-09-07 — *first tagged release*
 
 The first version published to version control. Everything below describes the

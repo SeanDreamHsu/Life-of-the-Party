@@ -180,7 +180,12 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173.
+Then open http://localhost:5173 for the game, or http://localhost:5173/landing/
+for the landing page.
+
+The landing page (`landing/`) is plain TypeScript and [anime.js](https://animejs.com)
+— no React. It imports its sprites, costs, lines and opening stages straight from
+`src/`, so retuning the game retunes the page. `npm run build` emits both pages.
 
 | Script | What it does |
 | --- | --- |
