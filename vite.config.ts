@@ -5,9 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
-    // Two pages: the game at the root, its landing page at /landing/.
+    // Two pages: the landing page at the root, the game itself at /play/.
     rolldownOptions: {
-      input: { main: 'index.html', landing: 'landing/index.html' },
+      input: { landing: 'index.html', play: 'play/index.html' },
     },
   },
 });

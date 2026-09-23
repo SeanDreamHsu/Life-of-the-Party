@@ -180,10 +180,11 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173 for the game, or http://localhost:5173/landing/
-for the landing page.
+Then open http://localhost:5173/play/ for the game. The site root,
+http://localhost:5173, is the landing page — the same page that is live at
+https://lotp.vercel.app.
 
-The landing page (`landing/`) is plain TypeScript and [anime.js](https://animejs.com)
+The landing page (`index.html` + `landing/`) is plain TypeScript and [anime.js](https://animejs.com)
 — no React. It imports its sprites, costs, lines and opening stages straight from
 `src/`, so retuning the game retunes the page. `npm run build` emits both pages.
 
