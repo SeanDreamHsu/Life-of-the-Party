@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import FloorSelector from './components/FloorSelector';
+import { floorNeighbours, floorAt, floorForWing, floorInfo, type FloorId } from './data/floors';
 import ActionQueue from './components/ActionQueue';
 import CameraBar from './components/CameraBar';
 import EventLog from './components/EventLog';
@@ -8,12 +10,15 @@ import HowToPlay from './components/HowToPlay';
 import InspectorPanel from './components/InspectorPanel';
 import SpriteGallery from './components/SpriteGallery';
 import TopBar from './components/TopBar';
+import PlaytestFeedback from './components/PlaytestFeedback';
+import Settings from './components/Settings';
+import { readFocusKey, saveFocusKey } from './settings/shortcuts';
 import { auditAllSprites } from './art';
 import { auditLayout } from './data/auditLayout';
 import { auditHouseMap } from './data/houseMap';
 import { auditFloorPlan } from './data/floorplan';
-import { auditRooms } from './data/rooms';
-import { WHOLE_LOT, zoomOut, type Camera } from './game/camera';
+import { auditRooms, ROOMS } from './data/rooms';
+import { cameraAtHost, WHOLE_LOT, zoomOut, type Camera } from './game/camera';
 import {
   availableActions,
   createInitialState,
@@ -21,14 +26,22 @@ import {
   project,
   reducer,
   type ActionOption,
+  type Msg,
 } from './game/state';
-import { guestAt, interactableAt, isAdjacent, type Guest, type Interactable } from './types/game';
+import { guestAt, interactableAt, type Guest, type Interactable, type Tile } from './types/game';
 
 /** How long the board sits locked in the Resolution Phase before handing back. */
-const RESOLUTION_MS = 420;
+const RESOLUTION_MS = 820;
 
 /** Set once the player has been shown the tutorial, so it opens exactly once. */
 const TUTORIAL_SEEN_KEY = 'lotp:tutorial-seen';
+
+const MOVE_KEYS: Record<string, Extract<Msg, { type: 'queueMove' }>['direction']> = {
+  w: 'up', arrowup: 'up',
+  s: 'down', arrowdown: 'down',
+  a: 'left', arrowleft: 'left',
+  d: 'right', arrowright: 'right',
+};
 
 /**
  * Whether this is somebody's first night. Wrapped because storage throws
@@ -45,7 +58,10 @@ function isFirstVisit(): boolean {
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, undefined, createInitialState);
+  const [activeFloor, setActiveFloor] = useState<FloorId>('ground');
   const [showGallery, setShowGallery] = useState(false);
+  const [focusKey, setFocusKey] = useState(readFocusKey);
+  const [focusRevision, setFocusRevision] = useState(0);
   const [showPanels, setShowPanels] = useState(true);
   const [showSecrets, setShowSecrets] = useState(false);
   // How far into the house we are looking. A view concern, so it lives here
@@ -53,6 +69,12 @@ export default function App() {
   const [camera, setCamera] = useState<Camera>(WHOLE_LOT);
   // A new player should not have to find the help screen; it finds them.
   const [showTutorial, setShowTutorial] = useState(isFirstVisit);
+
+  const chooseFloor = useCallback((floor: FloorId): void => {
+    setActiveFloor(floor);
+    setCamera(WHOLE_LOT);
+    dispatch({ type: 'selectTile', tile: null });
+  }, []);
 
   function closeTutorial(): void {
     setShowTutorial(false);
@@ -85,7 +107,7 @@ export default function App() {
   // first in anything that zooms.
   useEffect(() => {
     function onKey(event: KeyboardEvent): void {
-      if (event.key !== 'Escape') return;
+      if (event.key !== 'Escape' || event.defaultPrevented || document.querySelector('dialog[open], [aria-modal="true"]')) return;
       setCamera((current) => (current.level === 'lot' ? current : zoomOut(current)));
     }
     window.addEventListener('keydown', onKey);
@@ -99,6 +121,41 @@ export default function App() {
   }, [state.phase, state.turn]);
 
   const projection = useMemo(() => project(state), [state]);
+  const hostFloor = floorAt(projection.host.x, projection.host.y);
+  const focusHost = useCallback(() => {
+    setActiveFloor(hostFloor);
+    setCamera(cameraAtHost(state.grid, projection.host));
+    setFocusRevision(value => value + 1);
+    dispatch({ type: 'selectTile', tile: null });
+  }, [hostFloor, state.grid, projection.host]);
+  const previousHostFloor = useRef(hostFloor);
+  useEffect(() => {
+    // Browsing another floor is free. Only an actual host crossing changes the
+    // view automatically, including undoing a planned stair move.
+    if (previousHostFloor.current !== hostFloor) chooseFloor(hostFloor);
+    previousHostFloor.current = hostFloor;
+  }, [hostFloor, chooseFloor]);
+
+  useEffect(() => {
+    function onMoveKey(event: KeyboardEvent): void {
+      if (event.defaultPrevented || event.isComposing || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (showTutorial || showGallery || document.querySelector('dialog[open], [aria-modal="true"]')) return;
+      const target = event.target;
+      if (target instanceof HTMLElement && (target.isContentEditable || target.closest('input, textarea, select'))) return;
+      if (event.key.toLowerCase() === focusKey) {
+        event.preventDefault();
+        if (!event.repeat) focusHost();
+        return;
+      }
+      const direction = MOVE_KEYS[event.key.toLowerCase()];
+      if (!direction) return;
+      event.preventDefault();
+      if (activeFloor !== hostFloor) { chooseFloor(hostFloor); return; }
+      dispatch({ type: 'queueMove', direction });
+    }
+    window.addEventListener('keydown', onMoveKey);
+    return () => window.removeEventListener('keydown', onMoveKey);
+  }, [showTutorial, showGallery, activeFloor, hostFloor, chooseFloor, focusKey, focusHost]);
 
   const menuOptions = useMemo(
     () => (state.selected ? availableActions(state, projection, state.selected) : []),
@@ -110,13 +167,9 @@ export default function App() {
     const keys = new Set<string>();
     if (state.phase !== 'planning') return keys;
 
-    for (const row of state.grid) {
-      for (const tile of row) {
-        if (!isAdjacent(projection.host.x, projection.host.y, tile.x, tile.y)) continue;
-        if (availableActions(state, projection, tile).length > 0) {
-          keys.add(doorKey(tile.x, tile.y));
-        }
-      }
+    for (const point of floorNeighbours(state.grid, projection.host)) {
+      const tile = state.grid[point.y]?.[point.x];
+      if (tile && availableActions(state, projection, tile).length > 0) keys.add(doorKey(tile.x, tile.y));
     }
     return keys;
   }, [state, projection]);
@@ -129,6 +182,11 @@ export default function App() {
     ? interactableAt(projection.interactables, state.selected.x, state.selected.y)
     : undefined;
 
+  function takeStairs(tile: Tile): void {
+    const option = availableActions(state, projection, tile).find(action => action.kind === 'move');
+    if (option) dispatch({ type: 'queueAction', option, tile });
+  }
+
   function chooseAction(option: ActionOption): void {
     if (!state.selected) return;
     dispatch({ type: 'queueAction', option, tile: state.selected });
@@ -136,23 +194,34 @@ export default function App() {
 
   return (
     // The board is the page. Everything else is furniture bolted over it.
-    <div className="fixed inset-0 overflow-hidden">
+    <div className="game-shell fixed inset-0 overflow-hidden" data-panels={showPanels}>
+      <div className="game-stage">
+      <div className="floor-scene">
       <GameBoard
+        floor={activeFloor}
+        onTakeStairs={takeStairs}
         state={state}
         projection={projection}
         reachable={reachable}
         camera={camera}
+        focusRevision={focusRevision}
         onMoveCamera={setCamera}
         menuOptions={menuOptions}
         onSelectTile={(tile) => dispatch({ type: 'selectTile', tile })}
         onChooseAction={chooseAction}
       />
+      </div>
+      <div className="floor-caption" role="status">{floorInfo(activeFloor).name}</div>
+      {activeFloor !== hostFloor && <button type="button" className="floor-return ghostbtn"
+        onClick={() => chooseFloor(hostFloor)}>Return to host · {floorInfo(hostFloor).name}</button>}
+      </div>
 
       {/* HUD. Click-through except on the plates themselves, so the board
           underneath stays fully clickable in the gaps between them. */}
       <div className="pointer-events-none absolute inset-0 z-50">
+        <FloorSelector active={activeFloor} hostFloor={hostFloor} guests={projection.guests} onSelect={chooseFloor} />
         {/* Top left: the sign over the door, then the instrument panel. */}
-        <div className="pointer-events-auto absolute top-4 left-4 flex flex-col items-start gap-2.5">
+        <div className="game-header pointer-events-auto">
           <div className="signplate px-4 py-2">
             <h1 className="legend text-[1.5rem] leading-none font-bold text-brass">
               Life of the Party
@@ -162,17 +231,36 @@ export default function App() {
             </p>
           </div>
 
-          <CameraBar camera={camera} onMove={setCamera} />
+          <CameraBar camera={camera} floorName={floorInfo(activeFloor).name} onMove={setCamera} />
 
-          <TopBar
-            state={state}
-            projectedSuspicion={projection.suspicion}
-            onEndTurn={() => dispatch({ type: 'endTurn' })}
-          />
+
         </div>
 
         {/* Top right: small controls, out of the way. */}
-        <div className="pointer-events-auto absolute top-4 right-4 flex gap-2">
+        <div className="game-tools pointer-events-auto">
+          <PlaytestFeedback state={state} />
+          <button type="button" className="ghostbtn px-2.5 py-1 text-[0.78rem]"
+            onClick={focusHost} title={`Focus on the host’s room (${focusKey.toUpperCase()})`}>
+            Focus host · {focusKey.toUpperCase()}
+          </button>
+          <Settings focusKey={focusKey} onChangeFocusKey={key => {
+            setFocusKey(key);
+            return saveFocusKey(key);
+          }} />
+          <select
+            aria-label="View a room"
+            value={camera.roomId ?? ''}
+            onChange={(event) => {
+              const room = ROOMS.find(candidate => candidate.id === event.target.value && (!candidate.hidden || candidate.id === camera.roomId));
+              setCamera(room ? { level: 'room', wingId: room.wing, roomId: room.id } : WHOLE_LOT);
+            }}
+            className="ghostbtn max-w-[160px] px-2 py-1 text-[0.78rem]"
+          >
+            <option value="">Whole floor</option>
+            {ROOMS.filter(room => (!room.hidden || room.id === camera.roomId) && room.wing !== 'grounds' && floorForWing(room.wing) === activeFloor).map(room => (
+              <option key={room.id} value={room.id}>{room.name}</option>
+            ))}
+          </select>
           <button
             type="button"
             onClick={() => setShowTutorial(true)}
@@ -207,10 +295,15 @@ export default function App() {
           </button>
         </div>
 
+        <div className="game-instruments pointer-events-auto">
+          <TopBar state={state} projectedSuspicion={projection.suspicion}
+            onEndTurn={() => dispatch({ type: 'endTurn' })} />
+        </div>
+
         {showPanels && (
           <>
             {/* Right rail: what you consult while planning. */}
-            <aside className="pointer-events-auto absolute top-[4.6rem] right-4 bottom-4 flex w-[264px] flex-col gap-2.5 overflow-y-auto">
+            <aside className="game-rail pointer-events-auto">
               <ActionQueue
                 queue={state.queue}
                 minutes={state.minutes}
@@ -226,17 +319,13 @@ export default function App() {
                 showSecrets={showSecrets}
                 tasksCompleted={state.jobsDone.length}
               />
+              <EventLog entries={state.log} />
               <GuestRoster
-                guests={projection.guests}
+                guests={projection.guests.filter(guest => floorAt(guest.x, guest.y) === activeFloor)}
                 selectedGuestId={selectedGuest?.id ?? null}
                 departed={state.departed}
               />
             </aside>
-
-            {/* Bottom left: the ledger. */}
-            <div className="pointer-events-auto absolute bottom-4 left-4 w-[min(460px,42vw)]">
-              <EventLog entries={state.log} />
-            </div>
           </>
         )}
       </div>

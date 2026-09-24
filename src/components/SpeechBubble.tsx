@@ -30,7 +30,7 @@ export default function SpeechBubble({ guest }: SpeechBubbleProps) {
       className="pointer-events-none absolute z-40"
       style={{
         left: `${(guest.x + 0.5) * CELL_W}%`,
-        top: `${(guest.y + (nearTop ? 1.05 : -0.15)) * CELL_H}%`,
+        top: `${(guest.y + (nearTop ? 1.05 : -1.5)) * CELL_H}%`,
         transform: `translate(${flipX ? '-92%' : '-8%'}, ${nearTop ? '0' : '-100%'})`,
       }}
     >

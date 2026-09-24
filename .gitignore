@@ -4,6 +4,7 @@ node_modules
 # Build output
 dist
 dist-ssr
+.vercel
 
 # Local env / editor / OS cruft
 *.local

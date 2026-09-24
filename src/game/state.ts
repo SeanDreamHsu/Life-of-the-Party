@@ -1,3 +1,4 @@
+import { adjacentOnFloor, atlasPoint, floorAt, floorInfo, floorPoint, stairBetween } from '../data/floors';
 import {
   ACTION_AGITATION,
   ACTION_MINUTES,
@@ -14,7 +15,7 @@ import {
 import { key } from './ai';
 import { describeEmptyFeed, describeProfile } from './narrate';
 import { resolveTurn } from './resolve';
-import { roomAt } from '../data/rooms';
+import { narrativeNameAt, roomAt } from '../data/rooms';
 import {
   createHostStart,
   createInitialDecor,
@@ -26,7 +27,7 @@ import {
   decorAt,
   guestAt,
   interactableAt,
-  isAdjacent,
+  isOutdoors,
   isWalkable,
   tileAt,
   INTERACTABLE_META,
@@ -178,14 +179,16 @@ function pushGuest(
   decor: readonly Decor[],
   others: readonly Guest[],
 ): Position {
-  const dx = Math.sign(guest.x - from.x);
-  const dy = Math.sign(guest.y - from.y);
+  const origin = floorPoint(from), target = floorPoint(guest);
+  const floor = floorAt(guest.x, guest.y);
+  const dx = Math.sign(target.x - origin.x);
+  const dy = Math.sign(target.y - origin.y);
 
   let { x, y } = guest;
   for (let step = 0; step < distance; step += 1) {
-    const nx = x + dx;
-    const ny = y + dy;
-    if (!isWalkable(grid, decor, nx, ny)) break;
+    const local = floorPoint({ x, y });
+    const { x: nx, y: ny } = atlasPoint({ x: local.x + dx, y: local.y + dy }, floor);
+    if (!adjacentOnFloor({ x, y }, { x: nx, y: ny }) || !isWalkable(grid, decor, nx, ny)) break;
     if (others.some((other) => other.id !== guest.id && other.x === nx && other.y === ny)) break;
     x = nx;
     y = ny;
@@ -294,7 +297,15 @@ export function availableActions(
   const { host } = projection;
 
   if (tile.x === host.x && tile.y === host.y) return options;
-  if (!isAdjacent(host.x, host.y, tile.x, tile.y)) return options;
+  if (stairBetween(host, tile)) {
+    if (isWalkable(state.grid, state.decor, tile.x, tile.y)
+      && !guestAt(projection.guests, tile.x, tile.y)
+      && !projection.lockedDoors.includes(doorKey(tile.x, tile.y))) {
+      options.push({ kind: 'move', label: `Take stairs to ${floorInfo(floorAt(tile.x, tile.y)).name}`, cost: ACTION_MINUTES.move });
+    }
+    return options;
+  }
+  if (!adjacentOnFloor(host, tile)) return options;
   if (!tile.isPassable) return options;
 
   const guest = guestAt(projection.guests, tile.x, tile.y);
@@ -392,6 +403,7 @@ export function availableActions(
 
 export type Msg =
   | { type: 'selectTile'; tile: Tile | null }
+  | { type: 'queueMove'; direction: 'up' | 'down' | 'left' | 'right' }
   | { type: 'queueAction'; option: ActionOption; tile: Tile }
   | { type: 'undoLast' }
   | { type: 'clearQueue' }
@@ -412,7 +424,9 @@ function commitTurn(state: GameState): GameState {
 
   const entries: string[] = [];
   if (state.queue.length === 0) {
-    entries.push('You stood in the hall and did nothing.');
+    const tile = tileAt(state.grid, state.host.x, state.host.y);
+    const preposition = tile && isOutdoors(tile) ? 'on' : 'in';
+    entries.push(`You stood ${preposition} ${narrativeNameAt(state.grid, state.host.x, state.host.y)} and did nothing.`);
   } else {
     for (const action of state.queue) entries.push(`You: ${action.label.toLowerCase()}.`);
   }
@@ -505,6 +519,21 @@ export function reducer(state: GameState, msg: Msg): GameState {
   if (state.phase === 'resolution' && msg.type !== 'resolutionComplete') return state;
 
   switch (msg.type) {
+    case 'queueMove': {
+      // Resolve against the latest plan so fast key presses never reuse an old
+      // host position. Clicks and keys share the same legality and minute costs.
+      const projection = project(state);
+      const { x, y } = projection.host;
+      const dx = msg.direction === 'left' ? -1 : msg.direction === 'right' ? 1 : 0;
+      const dy = msg.direction === 'up' ? -1 : msg.direction === 'down' ? 1 : 0;
+      const local = floorPoint({ x, y });
+      const next = atlasPoint({ x: local.x + dx, y: local.y + dy }, floorAt(x, y));
+      const tile = tileAt(state.grid, next.x, next.y);
+      if (!tile) return state;
+      const option = availableActions(state, projection, tile).find(action => action.kind === 'move');
+      return option ? reducer(state, { type: 'queueAction', option, tile }) : state;
+    }
+
     case 'selectTile': {
       return { ...state, selected: msg.tile };
     }

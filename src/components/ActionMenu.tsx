@@ -3,6 +3,7 @@ import { formatMinutes } from '../game/actions';
 import type { ActionOption } from '../game/state';
 import { placeAt } from '../data/rooms';
 import type { Grid, Tile } from '../types/game';
+import { FLOOR_VIEW, floorPoint } from '../data/floors';
 
 const CELL_W = 100 / GRID_WIDTH;
 const CELL_H = 100 / GRID_HEIGHT;
@@ -24,15 +25,16 @@ interface ActionMenuProps {
  * so it reads as part of the same object rather than a browser context menu.
  */
 export default function ActionMenu({ tile, grid, options, onChoose, onDismiss }: ActionMenuProps) {
-  const flipX = tile.x > GRID_WIDTH * 0.6;
-  const flipY = tile.y > GRID_HEIGHT * 0.6;
+  const position = floorPoint(tile);
+  const flipX = position.x > GRID_WIDTH * 0.6;
+  const flipY = position.y > FLOOR_VIEW.h * 0.6;
 
   return (
     <div
       className="pointer-events-auto absolute z-50"
       style={{
-        left: `${(tile.x + (flipX ? 0 : 1)) * CELL_W}%`,
-        top: `${(tile.y + (flipY ? 1 : 0)) * CELL_H}%`,
+        left: `${(position.x + (flipX ? 0 : 1)) * CELL_W}%`,
+        top: `${(position.y + (flipY ? 1 : 0)) * CELL_H}%`,
         transform: `translate(${flipX ? '-100%' : '0'}, ${flipY ? '-100%' : '0'})`,
       }}
     >

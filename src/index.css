@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+.playtest-dialog { position: fixed; margin: auto; width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; padding: 24px; }
+.playtest-dialog::backdrop { background: #0d0a09d9; }
+
 /*
  * Game palette. Every terrain kind gets a base shade and an `-alt` shade;
  * TileCell alternates between them on (x + y) % 2 to get the checkerboard
@@ -113,7 +116,7 @@ body {
 .anim-sway    { animation: idle-sway 2.8s ease-in-out infinite; }
 .anim-twitch  { animation: idle-twitch 2.2s ease-in-out infinite; }
 .anim-jitter  { animation: idle-jitter 0.9s ease-in-out infinite; }
-.anim-dance   { animation: dance 0.46s ease-in-out infinite; }
+.anim-dance   { animation: dance 0.56s ease-in-out infinite; }
 .anim-emote   { animation: emote-float 3.6s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -240,3 +243,160 @@ body {
   border: 1px solid #0a0706;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), inset 0 -1px 0 rgba(226, 190, 120, 0.1);
 }
+
+
+/* Pixel frames carry the gait; transforms add only a small weight shift. */
+.character-position { transition-property: left, top; transition-timing-function: linear; }
+/* Keep the 32px art at two 16px tiles. Soles end at source y=29;
+   placing that ground point at the tile center makes occupancy readable. */
+.character-anchor {
+  position: absolute; left: -50%; top: -131.25%; width: 200%; height: 200%;
+}
+.character-body, .character-frames, .character-frame { position: absolute; inset: 0; }
+.character-body { transform-origin: 50% 90.625%; filter: drop-shadow(0 1px 0 #15141b); }
+.character-shadow {
+  position: absolute; left: 25.5%; top: 84.125%; width: 49%; height: 13%;
+  background: #11121d88; border-radius: 50%;
+}
+.character-shadow-selected { outline: 1px solid #f6d795; background: #dbb75466; }
+.character-shadow-host { outline: 1px solid #9be1da; background: #6ac9bb55; }
+.host-pointer {
+  position: absolute; top: -9%; left: 44%; width: 12%; height: 9%;
+  background: #adf4de; clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.character-name {
+  position: absolute; left: 50%; top: 103%; transform: translateX(-50%);
+  background: #211b20ed; color: #f7dfaf; border: 1px solid #b99754;
+  padding: 1px 5px; font: 11px Georgia, serif; white-space: nowrap;
+}
+@keyframes frame-first { 0%, 49.99% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes frame-second { 0%, 49.99% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@keyframes blink-first { 0%, 91%, 96%, 100% { opacity: 1; } 92%, 95% { opacity: 0; } }
+@keyframes blink-second { 0%, 91%, 96%, 100% { opacity: 0; } 92%, 95% { opacity: 1; } }
+.character-walking .character-frame-0 { animation: frame-first 0.32s step-end infinite; }
+.character-walking .character-frame-1 { animation: frame-second 0.32s step-end infinite; }
+.character-dancing .character-frame-0 { animation: frame-first 0.56s step-end infinite; }
+.character-dancing .character-frame-1 { animation: frame-second 0.56s step-end infinite; }
+.character-idle .character-frame-0 { animation: blink-first 4.6s step-end infinite; }
+.character-idle .character-frame-1 { animation: blink-second 4.6s step-end infinite; }
+@keyframes walk-weight { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3%); } }
+.anim-walk { animation: walk-weight .32s steps(2) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .character-position { transition-duration: 0s !important; }
+  .character-body, .character-frame { animation: none !important; }
+  .character-frame-1 { display: none; }
+}
+
+
+/* The house gets a real play surface. Controls sit around it, never on the furniture. */
+.game-shell { background: radial-gradient(ellipse at 40% 20%, #30291e, #100e0d 72%); --rail: 288px; }
+.game-shell[data-panels="false"] { --rail: 0px; }
+.game-header { position: absolute; top: 12px; left: 16px; display: flex; align-items: flex-start; flex-direction: column; gap: 8px; }
+.game-header h1 { font-size: 1.3rem; }
+.game-header .signplate { padding: 10px 16px; }
+.game-tools { position: absolute; top: 16px; right: 16px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; max-width: calc(100% - 330px); }
+.game-stage { position: absolute; top: 124px; left: 16px; right: calc(16px + var(--rail)); bottom: 116px; border: 1px solid #796138; box-shadow: 0 0 0 3px #17120e, 0 12px 35px #0008; }
+.game-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 25px #0004; }
+.game-rail { position: absolute; top: 124px; right: 16px; bottom: 116px; width: 272px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+.game-rail > * { flex-shrink: 0; }
+.game-instruments { position: absolute; left: 16px; right: 16px; bottom: 16px; }
+.instrument-strip { display: flex; align-items: stretch; justify-content: space-between; gap: 18px; padding: 12px 20px; min-height: 82px; }
+.instrument-suspicion { width: 220px; }
+@media (max-width: 1000px) {
+  .game-shell { --rail: 250px; }
+  .game-rail { width: 234px; }
+  .instrument-strip { gap: 10px; padding: 10px 14px; }
+  .instrument-suspicion { width: 180px; }
+}
+@media (max-width: 760px) {
+  .game-header .signplate p, .instrument-verdict { display: none; }
+  .game-header { top: 10px; left: 10px; }
+  .game-header .signplate { padding: 8px; }
+  .game-header h1 { font-size: 1.1rem; }
+  .game-tools { top: 10px; right: 10px; max-width: calc(100% - 220px); gap: 4px; }
+  .game-shell { --rail: 0px; }
+  .game-stage { top: 140px; left: 10px; right: 10px; bottom: 138px; }
+  .game-rail { top: 140px; right: 10px; bottom: 138px; width: min(272px, 75vw); z-index: 1; }
+  .game-instruments { left: 10px; right: 10px; bottom: 10px; }
+  .instrument-strip { flex-wrap: wrap; justify-content: space-around; gap: 8px 12px; padding: 10px; }
+  .instrument-strip > .w-px { display: none; }
+  .instrument-night { font-size: .8rem; }
+  .instrument-suspicion { width: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-stage * { transition-duration: 0s !important; }
+}
+
+/* One storey is mounted at a time; the entering floor slides from its level. */
+.floor-scene { position: absolute; inset: 0; }
+.floor-enter-up { animation: floor-up 440ms cubic-bezier(.22,.75,.22,1) both; }
+.floor-enter-down { animation: floor-down 440ms cubic-bezier(.22,.75,.22,1) both; }
+@keyframes floor-up { from { transform: translateY(-65%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes floor-down { from { transform: translateY(65%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.game-stage { left: 190px; overflow: hidden; }
+.floor-selector { position: absolute; left: 16px; top: 124px; width: 160px; padding: 8px; }
+.floor-selector-title { margin: 2px 5px 12px; font-size: .9rem; }
+.floor-button { position: relative; display: flex; align-items: flex-start; gap: 8px; width: 100%; padding: 13px 6px; text-align: left; border: 1px solid transparent; border-top-color: #7d622944; color: var(--color-bone-dim); cursor: pointer; }
+.floor-button:hover { background: #c8a24a15; color: var(--color-bone); }
+.floor-button[aria-pressed="true"] { border-color: var(--color-brass); background: #c8a24a20; color: var(--color-bone); box-shadow: inset 3px 0 var(--color-brass); }
+.floor-number { color: var(--color-brass); font-size: 1rem; line-height: 1.3; }
+.floor-copy { display: flex; flex-direction: column; gap: 6px; }
+.floor-copy strong { font-size: .8rem; font-weight: normal; }
+.floor-copy small { font-size: .65rem; line-height: 1.4; }
+.floor-host-dot { position: absolute; right: 4px; top: 6px; width: 4px; height: 4px; border-radius: 50%; background: #adf4de; }
+.floor-selector-hint { margin: 12px 4px 3px; font-size: .65rem; line-height: 1.5; color: var(--color-bone-dim); }
+.floor-caption { position: absolute; left: 10px; top: 8px; z-index: 45; pointer-events: none; padding: 4px 9px; background: #17110ee6; border: 1px solid #7d6229; color: var(--color-brass); font-size: .8rem; }
+.floor-return { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); z-index: 45; padding: 8px 12px; font-size: .8rem; white-space: nowrap; }
+.stair-marker { position: absolute; display: grid; place-items: center; border: 1px solid #e7cc86; background: repeating-linear-gradient(0deg,#3e3425 0 20%,#9b875e 21% 25%); color: #fff2bc; font: bold 16px sans-serif; cursor: pointer; text-shadow: 0 1px 3px #000; }
+.stair-marker:hover { outline: 2px solid #adf4de; }
+@media (max-width: 1000px) {
+  .game-stage { left: 150px; }
+  .floor-selector { width: 122px; }
+  .floor-button { gap: 5px; padding: 12px 4px; }
+  .floor-copy small:first-of-type { display: none; }
+}
+@media (max-width: 760px) {
+  .game-stage { left: 78px; }
+  .floor-selector { left: 10px; top: 140px; width: 60px; padding: 4px; }
+  .floor-selector-title { font-size: .6rem; margin: 4px 0 8px; text-align: center; }
+  .floor-button { flex-direction: column; align-items: center; gap: 5px; padding: 12px 2px; text-align: center; }
+  .floor-copy strong { font-size: .55rem; }
+  .floor-copy small, .floor-selector-hint { display: none; }
+  .floor-return { max-width: 95%; white-space: normal; width: max-content; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floor-enter-up, .floor-enter-down { animation: none; }
+}
+
+/* Real stair flights: the treads occupy two tiles, with a destination plaque. */
+.stair-flight {
+  border: 2px solid #b59a67;
+  border-radius: 0;
+  background: #2b2724;
+  box-shadow: 2px 3px 0 #151418, inset 2px 0 #e0c99a;
+  overflow: visible;
+}
+.stair-flight .stair-treads {
+  position: absolute;
+  inset: 3px 5px;
+  background: repeating-linear-gradient(to bottom, #aa9167 0 3px, #6d5b44 3px 5px, #302b27 5px 7px);
+  border-inline: 2px solid #d5bd8a;
+}
+.stair-flight .stair-destination {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 28px;
+  padding: 1px 4px;
+  border: 1px solid #ab9162;
+  background: #171921;
+  color: #f3dda7;
+  font: bold 10px/13px monospace;
+  white-space: nowrap;
+}
+.stair-flight:hover, .stair-flight:focus-visible { outline: 2px solid #f3dda7; outline-offset: 2px; }
+.stair-walkout .stair-treads { inset: 2px; }
+.stair-flight .stair-destination { top: calc(100% + 3px); bottom: auto; pointer-events: none; }
+.stair-flight[data-stairs-to="upper"] .stair-destination { top: auto; bottom: calc(100% + 3px); }
+.stair-flight .stair-treads { pointer-events: none; }
