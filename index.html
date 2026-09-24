@@ -3,13 +3,325 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="description" content="Life of the Party — an alpha playtest. Usher your mutating party guests home, then share your feedback." />
-    <meta name="theme-color" content="#241a15" />
-    <title>Life of the Party — Playtest</title>
+    <title>Life of the Party</title>
+    <meta
+      name="description"
+      content="A non-lethal, turn-based survival strategy game. Your house party has gone on for days, your guests are mutating, and you have to make leaving their idea."
+    />
+    <meta name="theme-color" content="#0d0a09" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./landing/landing.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <header class="nav plate">
+      <a class="brand" href="#top">
+        <span class="sprite" data-host></span>
+        Life of the Party
+        <span class="badge">α 0.7.5</span>
+      </a>
+      <ul>
+        <li><a href="#hour">The Hour</a></li>
+        <li><a href="#pull">The Pull</a></li>
+        <li><a href="#clock">The Clock</a></li>
+        <li><a href="#cast">The Cast</a></li>
+      </ul>
+      <a class="btn btn-brass" href="./play/">Play the alpha</a>
+    </header>
+
+    <main>
+      <!-- ============================================================ HERO -->
+      <section class="hero" id="top" aria-label="Life of the Party">
+        <div class="floor" id="floor" aria-hidden="true"></div>
+        <div class="tiles" id="tiles" aria-hidden="true"></div>
+        <div class="beams" id="beams" aria-hidden="true"></div>
+
+        <div class="hero-inner">
+          <div class="disco sprite" data-prop="discoball" aria-hidden="true"></div>
+          <p class="kicker">A non-lethal, turn-based survival strategy game</p>
+          <h1 class="title" id="title">Life <span class="of">of the</span> Party</h1>
+          <p class="typed" id="typed">
+            Your house party has been going for days. Your guests are no longer entirely people.
+          </p>
+          <div class="cta">
+            <a class="btn btn-brass" href="./play/">Play the alpha</a>
+            <a class="btn btn-ghost" href="#premise">See how it works</a>
+          </div>
+        </div>
+
+        <div class="crowd" id="crowd" aria-hidden="true"></div>
+        <p class="hint">Click the dance floor ↘</p>
+      </section>
+
+      <!-- ========================================================== TICKER -->
+      <div class="ticker" aria-label="Lines from the event log">
+        <div class="ticker-track" id="ticker"></div>
+      </div>
+
+      <!-- ========================================================= PREMISE -->
+      <section class="section" id="premise">
+        <p class="kicker">The premise</p>
+        <p class="premise" id="premiseText">
+          You cannot throw anyone out. You cannot hurt anyone.
+          <em>You have to make leaving their idea.</em>
+        </p>
+
+        <div class="stakes">
+          <article class="stake plate win" data-reveal>
+            <span class="well"><span class="sprite" data-food="pizza"></span></span>
+            <div>
+              <h3>Win</h3>
+              <p>
+                Usher every guest off the lot alive, using nothing but the house: the lights,
+                the speakers, the fridge, the doors, and a plate of something warm in the right
+                room at the right time.
+              </p>
+            </div>
+          </article>
+          <article class="stake plate lose" data-reveal>
+            <span class="well"><span class="sprite" data-emote="alert"></span></span>
+            <div>
+              <h3>Lose</h3>
+              <p>
+                The Suspicion Meter reaches 100 and the neighbours make the call — or you
+                seriously injure somebody getting them out the door.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ======================================================== THE HOUR -->
+      <section class="section" id="hour">
+        <div class="section-head">
+          <p class="kicker">01 · The Hour</p>
+          <h2>A turn isn't three actions. <em>It's sixty minutes.</em></h2>
+          <p class="lede">
+            Everything the host does costs time you can picture. Plan the hour, take any of it
+            back, then end it — and watch the house answer. The humane options are slow. The
+            fast ones are loud. Try it.
+          </p>
+        </div>
+
+        <div class="hour-grid">
+          <div class="dial-card plate" data-reveal>
+            <div class="dial">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <g id="ticks"></g>
+                <circle class="track" cx="100" cy="100" r="74" />
+                <circle class="spent" id="spentArc" cx="100" cy="100" r="74" />
+                <circle class="debt" id="debtArc" cx="100" cy="100" r="86" />
+              </svg>
+              <div class="dial-read" aria-live="polite">
+                <strong id="minLeft">60</strong>
+                <span id="minLabel">minutes left</span>
+              </div>
+            </div>
+            <p class="ledger" id="ledger">Night One · Hour 52</p>
+          </div>
+
+          <div class="console plate" data-reveal>
+            <div class="actions" id="actions"></div>
+            <div>
+              <div class="legend">Your intentions</div>
+              <div class="queue well" id="queue"></div>
+            </div>
+            <div class="gauge">
+              <div class="gauge-top">
+                <span class="legend">Suspicion <span id="suspNum">12</span>%</span>
+                <em id="suspWord">nobody minds yet</em>
+              </div>
+              <div class="bar well"><i id="suspBar"></i></div>
+            </div>
+            <div class="console-row">
+              <button class="btn btn-ghost" id="undo" type="button">Undo</button>
+              <button class="btn btn-brass" id="endHour" type="button">End the Hour</button>
+            </div>
+            <p class="log well" id="hourLog" aria-live="polite">
+              Queue something. Nothing happens until you end the hour.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== THE PULL -->
+      <section class="section" id="pull">
+        <div class="section-head">
+          <p class="kicker">02 · The Pull</p>
+          <h2>Nobody tells you what they want. <em>Watch who moves.</em></h2>
+          <p class="lede">
+            Every guest is secretly drawn to one thing — or, for some, driven off by it. You
+            find out the way you would at a real party: switch something on and see who drifts
+            toward it.
+          </p>
+        </div>
+
+        <div class="lures" id="lures"></div>
+
+        <div class="lab plate" data-reveal>
+          <div class="lane" id="lane"></div>
+          <div class="lab-row" id="stimuli">
+            <span class="label">Try</span>
+            <button class="btn btn-ghost" type="button" data-stim="speaker">Play the speaker</button>
+            <button class="btn btn-ghost" type="button" data-stim="snack">Put out pizza</button>
+            <button class="btn btn-ghost" type="button" data-stim="lamp">Switch on the lamp</button>
+          </div>
+          <p class="log well" id="labLog" aria-live="polite"></p>
+          <div class="lab-row" id="guesses">
+            <span class="label">Your guess</span>
+          </div>
+          <div class="lab-row">
+            <p class="verdict" id="verdict" aria-live="polite"></p>
+            <button class="btn btn-ghost" type="button" id="nextGuest" style="margin-left: auto">
+              Next guest
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= MUTATION -->
+      <section class="mutation" id="clock">
+        <div class="mutation-sticky" id="mutSticky">
+          <div class="mutation-inner">
+            <div>
+              <p class="kicker">03 · The Clock</p>
+              <h2 class="h2">Every six hours, <em>everyone gets worse.</em></h2>
+              <ol class="stages" id="stages"></ol>
+            </div>
+            <div class="mut-figure">
+              <div class="mut-frame well"><div class="sprite anim-0" id="mutSprite"></div></div>
+              <p class="clock">Hour <strong id="mutHour">0</strong> of the night</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== THE CAST -->
+      <section class="section" id="cast">
+        <div class="section-head">
+          <p class="kicker">04 · The Cast</p>
+          <h2>Twelve people who <em>will not go home.</em></h2>
+          <p class="lede">
+            Each one written by hand. Every character is funny in a way that is also a little
+            sad — which is what makes you want to know them rather than just clear them.
+          </p>
+        </div>
+        <div class="cast" id="castGrid"></div>
+        <p class="cast-note">
+          Hover a guest to hear them. None of them will tell you what they're drawn to — that's
+          the game.
+        </p>
+      </section>
+
+      <!-- ========================================================= CAMERAS -->
+      <section class="section" id="cameras" style="padding-top: 0">
+        <div class="cameras plate" data-reveal>
+          <div class="pc-wrap" aria-hidden="true">
+            <div class="glow"></div>
+            <div class="sprite" data-prop="pc"></div>
+          </div>
+          <div>
+            <p class="kicker">05 · The Cameras</p>
+            <h2 class="h2" style="font-size: clamp(1.8rem, 4vw, 2.8rem)">
+              The only way to be sure is to watch.
+            </h2>
+            <p class="lede">
+              The surveillance PC names one guest's secret per sitting — after you've done twelve
+              different jobs around the house. But a monitor is a light, and it sits in the one
+              room nobody may enter. <em>The tool and the hazard are the same object.</em>
+            </p>
+            <div class="pips" id="pips" aria-label="Twelve jobs to unlock the cameras"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== SPRITE DATA -->
+      <section class="section" id="data">
+        <div class="section-head">
+          <p class="kicker">06 · Under the floorboards</p>
+          <h2>Every sprite is a <em>string.</em></h2>
+          <p class="lede">
+            No image files. Every guest, lamp and slice of pizza is authored in plain text — one
+            character per pixel — and painted at runtime. The same four poses, recoloured per
+            guest and rotted per stage, make forty-eight looks. This picture is being drawn from
+            the text beside it.
+          </p>
+        </div>
+        <div class="data">
+          <pre class="code well" id="code" aria-label="Sprite source"></pre>
+          <div>
+            <div class="pixels well" id="pixels" role="img" aria-label="The sprite, rendered"></div>
+            <div class="data-controls">
+              <span id="poseName">Stage 0 · Merely Tipsy</span>
+              <button class="btn btn-ghost" type="button" id="mutate">Mutate ›</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= ROADMAP -->
+      <section class="section" id="road">
+        <div class="section-head">
+          <p class="kicker">07 · Where it's going</p>
+          <h2>Built in the open. <em>Headed for Steam.</em></h2>
+        </div>
+        <div class="road" id="roadmap">
+          <i class="road-line" id="roadLine" aria-hidden="true"></i>
+          <article class="stop plate now" data-reveal>
+            <p class="kicker" style="margin-bottom: 0.4rem">Now · Alpha v0.7.5</p>
+            <h3>Phase 1 — The web prototype</h3>
+            <p>
+              The economy, the AI and the house, dialled in with hot reload instead of fighting
+              an engine. Twelve guests, twenty rooms across three floors, a 68×35 lot,
+              simultaneous turn resolution and BFS pathfinding.
+            </p>
+            <div class="chips">
+              <span>React 19</span><span>TypeScript</span><span>Vite</span
+              ><span>Tailwind 4</span><span>Zero image files</span>
+            </div>
+          </article>
+          <article class="stop plate" data-reveal>
+            <p class="kicker" style="margin-bottom: 0.4rem">Next</p>
+            <h3>Closing the loop</h3>
+            <p>
+              The endgame screens, the Pantry Reserve, injury as a real consequence, save and
+              resume — and, in a game about a speaker, sound.
+            </p>
+          </article>
+          <article class="stop plate" data-reveal>
+            <p class="kicker" style="margin-bottom: 0.4rem">Later</p>
+            <h3>Phase 2 — The commercial build</h3>
+            <p>
+              The proven logic moves to Godot, with native 2D tilemaps, for a pixel-perfect Steam
+              release.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ========================================================== FINALE -->
+      <section class="section finale">
+        <p class="kicker">It's hour fifty-two</p>
+        <h2 class="h2">The party is <em>still going.</em></h2>
+        <div class="cta">
+          <a class="btn btn-brass" href="./play/">Play the alpha</a>
+          <a class="btn btn-ghost" href="https://github.com/SeanDreamHsu/Life-of-the-Party"
+            >Read the source</a
+          >
+        </div>
+        <div class="crowd" id="crowd2" aria-hidden="true"></div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Life of the Party · alpha v0.7.5 · MIT licensed</span>
+      <span>Nobody was harmed in the making of this party. That's the rule.</span>
+    </footer>
+
+    <script type="module" src="./landing/main.ts"></script>
   </body>
 </html>
