@@ -92,6 +92,11 @@ happened to them. Two rules held throughout that file:
 2. **Every character is funny in a way that is also a little sad.** That is what
    makes a player want to *know* them rather than just clear them.
 
+Who they actually *are* (backstories, relationships and the running jokes
+between them) is written up in [CHARACTERS.md](CHARACTERS.md). Every hidden lure
+in there is folded behind a spoiler, so it can be read without giving the
+deduction away.
+
 Each guest carries:
 
 - **`hiddenLure`** — `bass`, `food`, `light`, or `quiet`. What they are secretly
@@ -180,7 +185,13 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173.
+Then open http://localhost:5173/play/ for the game. The site root,
+http://localhost:5173, is the landing page — the same page that is live at
+https://lotp-official.vercel.app.
+
+The landing page (`index.html` + `landing/`) is plain TypeScript and [anime.js](https://animejs.com)
+— no React. It imports its sprites, costs, lines and opening stages straight from
+`src/`, so retuning the game retunes the page. `npm run build` emits both pages.
 
 | Script | What it does |
 | --- | --- |

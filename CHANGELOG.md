@@ -71,6 +71,28 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Furniture and spawn changes alter opening positions and walking routes; lure-source locations,
 AI priorities and the minute/suspicion/agitation economy are unchanged.
 
+### Added
+
+- **A landing page** at the site root (`index.html` + `landing/`). The game
+  itself moves to `/play/`. Every sprite,
+  action cost, bark and opening mutation stage on it is read from `src/`, not
+  restated. It includes a playable sixty-minute hour, a lure-deduction lab (the
+  demo guest's lure is dealt at random, so the page never spoils the real one),
+  a scroll-driven mutation sequence and a sprite drawn live from its source
+  text. Animation is anime.js v4; `prefers-reduced-motion` is honoured
+  throughout. Built on the redesign above, so its cast, host and demos draw
+  the new character art.
+
+### Docs
+
+- **`CHARACTERS.md`**, a character bible for all twelve guests, the host and the
+  room nobody knows about: backstories, relationships, running jokes and
+  per-guest play tips, built on top of the canon in `cast.ts` and matched to
+  the redesigned cast and three-storey house. Each guest's hidden lure sits
+  behind a collapsed spoiler, so the doc can be read without spoiling the
+  deduction loop. Where it and `cast.ts` disagree, `cast.ts` wins.
+- The README's *Guests* section links to it.
+
 ## [0.7.5] — 2026-09-07 — *first tagged release*
 
 The first version published to version control. Everything below describes the
