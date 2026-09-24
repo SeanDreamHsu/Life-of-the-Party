@@ -13,16 +13,73 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Host camera shortcut
+
+- Press F to focus the host’s current room and floor, including planned moves.
+  Repeated use recenters a dragged view without spending game time.
+- Add Settings to rebind the shortcut to a letter or number, remember it in this
+  browser, and reset to F. Reserve movement keys and ignore game shortcuts while
+  typing or using a dialog.
+
+### Stacked floors and stairs
+
+- Give Ground Floor, Upper Floor and Basement the same 56 × 25 footprint and
+  screen origin. Only the selected storey renders; switching floors retains the
+  overview scale. Start with the whole ground floor visible.
+- Expand the upper and basement rooms into their own storeys. Add shared rear
+  landings and move the existing furniture groups into the deeper rooms.
+- Add visible stair flights between ground/upper and ground/basement, plus a
+  basement walkout. Stairs align vertically, cost one minute, respect occupied
+  destinations, work in the projected plan and support undo.
+- Use the same explicit stair graph for NPC routing and layout reachability.
+  Keep proximity dialogue, familiarity and dancing on the appropriate floor.
+- Show the selected floor and host location. A large travel button appears on
+  a stair landing; small overview destination labels cannot intercept clicks.
+- Add `npm run verify:floors` for shared coordinates, all six directed trips,
+  occupancy, costs, commit/undo, NPC routing and the real keyboard route from
+  the foyer. Existing build and art/layout checks also pass.
+
+### Art, furnishing and movement
+
+- Redesign the host and all twelve guests with distinct hair, outfits, body
+  widths and accessories. Keep identities readable through four mutation stages.
+- Add cached idle/blink, walking and dance frames, north-facing art, grounded
+  contact shadows, a host pointer and a selected-guest nameplate.
+- Animate actual position changes over 640ms and keep the resolution gate open
+  for 820ms so the simultaneous step can be read. Idles remain within their tile.
+- Rebuild all eighteen room compositions, reducing 252 interim decor placements
+  to 133. Keep corridors clear, remove decorative floor litter, and place
+  seating, tables and storage in coherent activity groups.
+- Place all twelve guests in authored activity groups and start the host in the
+  foyer, with the exit and nearby guests visible.
+- Join the dining tables into a continuous banquet table.
+- Add place-setting tables and north-facing seating. Render larger woven rugs
+  and corridor runners at native pixel resolution, with room-boundary audits.
+- Lift ambient visibility while retaining candle pools and music-driven lights.
+  Freeze character animation, movement transitions and light motion when the
+  system requests reduced motion.
+- Put the instrument bar and side panels outside the play surface. Reframe
+  rooms when panels open or the window resizes; downsample the overview when
+  needed so the whole property and every exit remain visible.
+- Add a room selector, a subtle focus border/dimming, and a recenter control
+  after panning. Hidden rooms stay absent from the selector.
+- Expand the sprite gallery with the complete cast and a live motion study.
+- Add `npm run verify:art`: all five startup audits, spawn checks, unique
+  silhouettes, walk frames, 24 deterministic turns, queue/undo, clear corridors
+  and every listed room camera at four viewport sizes.
+
+Furniture and spawn changes alter opening positions and walking routes; lure-source locations,
+AI priorities and the minute/suspicion/agitation economy are unchanged.
+
 ### Docs
 
 - **`CHARACTERS.md`**, a character bible for all twelve guests, the host and the
   room nobody knows about: backstories, relationships, running jokes and
-  per-guest play tips, built on top of the canon in `cast.ts`. Each guest's
-  hidden lure sits behind a collapsed spoiler, so the doc can be read without
-  spoiling the deduction loop. Where it and `cast.ts` disagree, `cast.ts` wins.
+  per-guest play tips, built on top of the canon in `cast.ts` and matched to
+  the redesigned cast and three-storey house. Each guest's hidden lure sits
+  behind a collapsed spoiler, so the doc can be read without spoiling the
+  deduction loop. Where it and `cast.ts` disagree, `cast.ts` wins.
 - The README's *Guests* section links to it.
-
----
 
 ## [0.7.5] — 2026-09-07 — *first tagged release*
 

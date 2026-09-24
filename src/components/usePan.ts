@@ -37,6 +37,7 @@ export interface PanControls {
    * should be ignored. Reading it clears it.
    */
   consumeDragClick: () => boolean;
+  reset: () => void;
 }
 
 export interface PanBounds {
@@ -69,6 +70,9 @@ export function usePan(resetKey: string, bounds: PanBounds): PanControls {
   // A new framing is a fresh start; see the note above about stale offsets.
   useEffect(() => {
     setOffset({ x: 0, y: 0 });
+    start.current = null;
+    moved.current = false;
+    setDragging(false);
   }, [resetKey]);
 
   // Clamping lives in an effect as well as in the move handler, because the
@@ -144,5 +148,11 @@ export function usePan(resetKey: string, bounds: PanBounds): PanControls {
     return value;
   }, []);
 
-  return { offset, dragging, onPointerDown, consumeDragClick };
+  const reset = (): void => {
+    start.current = null;
+    moved.current = false;
+    setDragging(false);
+    setOffset({ x: 0, y: 0 });
+  };
+  return { offset, dragging, onPointerDown, consumeDragClick, reset };
 }

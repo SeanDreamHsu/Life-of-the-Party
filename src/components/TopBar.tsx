@@ -58,9 +58,9 @@ export default function TopBar({ state, projectedSuspicion, onEndTurn }: TopBarP
         : null;
 
   return (
-    <div className="plate flex items-stretch gap-4 px-4 py-2.5">
+    <div className="plate instrument-strip">
       {/* The night */}
-      <div className="flex flex-col justify-center pr-4">
+      <div className="instrument-night flex flex-col justify-center">
         <div className="legend text-[1.05rem] leading-none font-bold whitespace-nowrap">
           Night {NUMERALS[state.day] ?? state.day}
         </div>
@@ -124,10 +124,10 @@ export default function TopBar({ state, projectedSuspicion, onEndTurn }: TopBarP
       <div className="w-px bg-gradient-to-b from-transparent via-brass-dim to-transparent" />
 
       {/* The gauge */}
-      <div className="flex w-[196px] flex-col justify-center">
+      <div className="instrument-suspicion flex flex-col justify-center">
         <div className="mb-1 flex items-baseline justify-between gap-3">
           <span className="legend text-[0.9rem] leading-none font-bold">Suspicion</span>
-          <span className="text-[0.72rem] text-bone-dim italic">{suspicionVerdict(projectedSuspicion)}</span>
+          <span className="instrument-verdict text-[0.72rem] text-bone-dim italic">{suspicionVerdict(projectedSuspicion)}</span>
         </div>
 
         <div className="well relative h-3.5 w-full overflow-hidden">

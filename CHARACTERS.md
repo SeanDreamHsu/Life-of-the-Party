@@ -32,14 +32,18 @@ questions. Like: *what happened to Keith?*
 | 🧥 | [Roz](#roz) | Four Goodbyes | The Foyer | 🥴 Merely Tipsy | A goodbye with no end date |
 | 🍳 | [Teddy](#teddy) | The Chef Nobody Hired | The Kitchen | 🤢 Rough Shape | Let him cook |
 | 🎧 | [Nadia](#nadia) | Owner of The Speaker™ | The Ballroom | 🤢 Rough Shape | Gatekeeping the aux since Friday |
-| 😴 | [Colm](#colm) | Asleep | Guest Room Two | 🥴 Merely Tipsy | Sleepmaxxing |
-| 🙇 | [Yusuf](#yusuf) | Somebody's Plus-One | The Main Hall | 🤢 Rough Shape | Knows where your stuff is. Won't say how. |
+| 😴 | [Colm](#colm) | Asleep | Guest Room Two (upstairs) | 🥴 Merely Tipsy | Sleepmaxxing |
+| 🙇 | [Yusuf](#yusuf) | Somebody's Plus-One | The Rec Room (basement) | 🤢 Rough Shape | Knows where your stuff is. Won't say how. |
 | 📱 | [Bex](#bex) | The Documentarian | The Theater | 🧟 Mutating | Four hours of drafts, zero posts |
 | 🍽️ | [Marlon](#marlon) | Seconds Guy | The Dining Room | 🧟 Mutating | Every plate has load-bearing garlic bread |
 
 **Condition, from bad to worse:** 🥴 Merely Tipsy → 🤢 Rough Shape → 🧟 Mutating →
 💀 Feral. Everybody slides one stage every six hours, and sooner if you wind them
 up enough.
+
+**The house has three floors now.** Everyone starts on the ground floor except
+Colm, who is asleep upstairs, and Yusuf, who is alone in the basement for reasons
+we'll get to.
 
 **Also starring:** [You, the Host](#you-the-host) ·
 [Sean (classified)](#classified-sean) ·
@@ -56,18 +60,20 @@ up enough.
 
 > *"Great party. Great, great party."*
 
-**Found in:** The Ballroom · **Starts:** 🤢 Rough Shape · **Fit check:** blue
-shirt, slate jeans, and the face of a man who forgot why he came downstairs
+**Found in:** The Ballroom · **Starts:** 🤢 Rough Shape · **Fit check:**
+swept-back hair, a blue jacket, big shoulders, and the face of a man who forgot
+why he came downstairs
 
 At hour four, Gary knocked on your door to ask you to turn it down. That was two
 days ago. He is the noise complaint that became the noise. He came to shut the
 party down and the party shut *him* down instead. A villain origin story, but
 backwards.
 
-He says he lives upstairs. Nobody has checked what's upstairs. All anyone knows
-is that there's a smoke alarm up there that chirps once and gives up, which is
-also Gary's whole energy. The canoe lives rent-free in his head. Gary lives
-rent-free in your house.
+He says he lives upstairs. Upstairs is your bedrooms. He does not live in any of
+them. Nobody has asked a follow-up question. All anyone knows for sure is that
+there's a smoke alarm up there that chirps once and gives up, which is also
+Gary's whole energy. The canoe lives rent-free in his head. Gary lives rent-free
+in your house.
 
 He has told the same story about a canoe to four different people. Here's
 everything the house has pieced together: there was a lake, there was a canoe,
@@ -94,7 +100,7 @@ If you're ever there when it happens: wave back. It's free.
 | **Most likely to** | Say "great party" at a funeral |
 | **Roman Empire** | Keith |
 | **Toxic trait** | Yells "THIS IS MY SONG" at every song. It is never his song. Once it was a ringtone. |
-| **🚩 Red flag** | Lives "upstairs." Where upstairs is, exactly, remains unconfirmed. |
+| **🚩 Red flag** | Says he lives upstairs. You've been upstairs. It's your bedrooms. |
 | **💚 Green flag** | Dances like a man who has forgotten anyone can see him. Honestly? Goals. |
 | **Aura** | −200 for dancing like a controlled fall. +500 for fully committing to it. |
 
@@ -130,9 +136,9 @@ Is it a crush? Is it fear? Chat, is this rizz? (There's a theory. See
 > *"Fascinating," says Denise, to nobody.*
 
 **Found in:** The Kitchen · **Starts:** 🥴 Merely Tipsy (Denise disputes this) ·
-**Fit check:** raspberry top, cream trousers, and white trainers that are *still
-white* after fifty-two hours. Scientists are baffled. Nothing has been spilled on
-Denise. Nothing would dare.
+**Fit check:** curls, earrings, a raspberry cardigan, cream trousers, and white
+trainers that are *still white* after fifty-two hours. Scientists are baffled.
+Nothing has been spilled on Denise. Nothing would dare.
 
 Denise has been taking mental notes since hour one. She has not said why. Is it a
 book? A police statement? A one-star review of your house? Nobody knows, and
@@ -201,8 +207,8 @@ noticed. Denise notices everything.
 
 **Found in:** The Study, the quietest room in the house, which he located within
 four minutes of arriving · **Starts:** 🧟 Mutating (already) · **Fit check:**
-ginger hair, olive-green top, brown trousers. Dressed like a forest. Named like a
-forest. Would rather be in a forest.
+shaggy ginger hair, an olive-green hoodie, and a scarf. Indoors. At a party.
+Dressed like a forest. Named like a forest. Would rather be in a forest.
 
 Moss did not want to come. Moss says this is fine, repeatedly. He is the "this is
 fine" dog, except the room isn't on fire. It's just *loud*.
@@ -251,11 +257,12 @@ Bring tissues.
 
 **Quiet.** Moss isn't drawn *to* anything. He runs *from* noise.
 
-- Switch on a speaker (anywhere in the house) and Moss backs away from it. Music
-  is a broom: put the noise behind him and he retreats the other way.
-- But every hour he spends being chased raises his agitation, and he started the
-  night Mutating and stressed. Push too hard and he'll turn early. Be gentle with
-  Moss. Moss has been through enough.
+- Switch on a speaker (anywhere in the house) and Moss backs away from it. The
+  catch: "away" mostly means the far corner of the Study, where he stews. Music
+  doesn't sweep Moss anywhere useful. It corners him.
+- And every hour he's chased raises his agitation. He started the night Mutating
+  and stressed, and twelve hours of Ballroom music takes him from 35 to 77. At
+  100 he turns early. Be gentle with Moss. Moss has been through enough.
 - Don't switch on the Study lamp while he's in there. It won't bother *him*, but
   it'll summon every light-chaser in the house into the one room he picked to be
   alone in. Don't do that to Moss.
@@ -271,8 +278,8 @@ Bring tissues.
 > *"Wait — wait, no, listen. LISTEN."*
 
 **Found in:** The Foyer, holding court · **Starts:** 🥴 Merely Tipsy (how??) ·
-**Fit check:** purple top, dark trousers, and the thousand-yard stare of someone
-who has come out the other side of sleep
+**Fit check:** a purple dress, a high ponytail, earrings, and the thousand-yard
+stare of someone who has come out the other side of sleep
 
 This was Priya's idea. She calls it "the thing" and will not elaborate. Are you
 coming to the thing? The thing is still going. The thing has a life of its own
@@ -322,13 +329,14 @@ will learn, fresh, several more times tonight.
 to be." The game told you. It literally told you.
 
 - Lamps pull her in, and so does the surveillance PC, because a monitor is a
-  light. The desk is in your bedroom, which is off-limits. Leave the screen on
-  and Priya will moth her way into the one room you can't let anybody into. Put
-  the PC back to sleep when you're done with it.
+  light. The desk is in your bedroom upstairs, which is off-limits. Leave the
+  screen on and Priya will moth her way up the stairs and into the one room you
+  can't let anybody into. It's a long walk, so it takes her a while. She gets
+  there. Put the PC back to sleep when you're done with it.
 - Every light in the game is indoors, so lamps can steer her but can't walk her
   out. The last few tiles are on you.
-- She starts in the Foyer, a handful of steps from the front door. Remember that
-  when you're planning where the night ends.
+- She starts in the Foyer, seven steps from the lawn, closer to the way out than
+  any other guest. Remember that when you're planning where the night ends.
 
 </details>
 
@@ -341,8 +349,9 @@ to be." The game told you. It literally told you.
 > *"Anyone need anything? I'm up."*
 
 **Found in:** The Kitchen (where else) · **Starts:** 🤢 Rough Shape ·
-**Fit check:** golden-blond hair and a burnt-orange shirt. A golden retriever
-wearing a person costume. Big "is this your ball? I found your ball" energy.
+**Fit check:** a golden-blond quiff, a burnt-orange waistcoat, a big frame, and a
+chain he wears like a dog tag. A golden retriever wearing a person costume. Big
+"is this your ball? I found your ball" energy.
 
 Benno brought the keg on the first night and considers this his full and final
 contribution. He will be bringing this up for the rest of his life.
@@ -412,8 +421,8 @@ back toward the fridge by default.
 > *"Right. Right, okay. Two more minutes."*
 
 **Found in:** The Foyer. The front door is *right there.* · **Starts:**
-🥴 Merely Tipsy · **Fit check:** red hair, teal top, and a coat she's holding
-like a hostage
+🥴 Merely Tipsy · **Fit check:** a red bob, glasses, and a teal jacket, which is
+currently on. That's coat-on number three. Give it an hour.
 
 Roz has put her coat on twice and taken it off twice. She has a train at six.
 She has had a train at six since Saturday. The train has started to take it
@@ -464,8 +473,8 @@ Denise has not told her to go home. Draw your own conclusions.
 - Like every light-chaser, lamps can steer her but can't lead her outside,
   because all the lights are indoors. And keep her away from the glowing monitor
   in your bedroom.
-- She starts closer to the front door than almost anybody. A few careful nudges
-  and she's on the lawn.
+- She starts ten steps from the lawn. Only Priya starts closer. A few careful
+  nudges and she's out.
 - A nudge is eight whole minutes of you, the host, actually talking to her.
   Honestly? That might be what she was waiting for.
 
@@ -480,8 +489,8 @@ Denise has not told her to go home. Draw your own conclusions.
 > *"There's food if anyone wants food. There's food."*
 
 **Found in:** The Kitchen. Obviously. · **Starts:** 🤢 Rough Shape ·
-**Fit check:** mustard-yellow shirt, olive trousers, and a spoon he forgot he
-was holding
+**Fit check:** a mustard cap, a striped top, olive trousers, and a spoon he
+forgot he was holding. He's still dressed for a shift.
 
 Teddy found the kitchen on the first night and never really came back out.
 Nobody asked him to cook. Nobody is hungry. Let him cook.
@@ -547,10 +556,10 @@ back to the fridge like a homing pigeon.
 
 > *"No requests. I'm not doing requests."*
 
-**Found in:** The Ballroom, within arm's reach of the speaker · **Starts:**
-🤢 Rough Shape · **Fit check:** magenta top, all-black everything else, spotless
-white trainers. She dresses like a DJ because she *is* the DJ, and she will tell
-you.
+**Found in:** The Ballroom, across the dance floor from her speaker, keeping an
+eye on it · **Starts:** 🤢 Rough Shape · **Fit check:** a top bun, a magenta
+jacket, headphones, and spotless white trainers. She dresses like a DJ because
+she *is* the DJ, and she will tell you.
 
 Nadia brought the speaker and has not relinquished it for fifty-two hours. She
 has been on aux since Friday. Nobody else is allowed on aux. The aux is not for
@@ -594,7 +603,8 @@ the most disrespectful thing a person can do.
 
 **Heavy Bass.** "Nadia moves toward the sound like it owes her money."
 
-- She starts right next to the Ballroom speaker. Leave it off and she gets
+- She starts across the dance floor from the Ballroom speaker. Switch it on and
+  she heads straight for it, calmer with every step. Leave it off and she gets
   restless. Run something that isn't for her and she gets worse.
 - There's a second speaker in the Rec Room downstairs. If she finds it, she has
   a studio. Good luck.
@@ -611,10 +621,10 @@ the most disrespectful thing a person can do.
 
 > *"Mm? Yeah. Yeah, I'm up."* (Colm is not up.)
 
-**Found in:** Guest Room Two, horizontally · **Starts:** 🥴 Merely Tipsy,
-technically. Unconscious, practically. · **Fit check:** navy shirt and grey hair.
-Either he's older than everyone here, or he's been asleep so long his hair gave
-up waiting.
+**Found in:** Guest Room Two, upstairs, horizontally · **Starts:** 🥴 Merely
+Tipsy, technically. Unconscious, practically. · **Fit check:** neatly parted grey
+hair, glasses, and a navy cardigan. Full grandpacore. Either he's older than
+everyone here, or he's been asleep so long his hair gave up waiting.
 
 Colm came to the party straight off a double shift. He was going to have one
 drink, say hello, and head home. He went for a lie-down "for five minutes." That
@@ -664,12 +674,14 @@ Nadia has a whole beef with him that he has also slept through.
 
 **Quiet.** He isn't drawn to anything. He drifts away from noise.
 
-- Switch on music and Colm relocates, without ever fully waking up, to somewhere
-  quieter. A speaker is the only alarm clock that works on him.
-- Left alone he's the calmest guest in the house, and he just drifts. He is not
-  going to find the front door by himself. You'll have to plan his route.
+- Switch on music and Colm shuffles away from it without ever fully waking up,
+  to the far side of Guest Room Two, and no further. A speaker is the world's
+  least effective alarm clock.
+- Left alone he's the calmest guest in the house, and he just drifts. He's also
+  upstairs, and at 45 steps from the lawn he's further from a way out than
+  anybody. He is not finding his way out by himself. You'll be walking him.
 - Being chased by music bumps his agitation every hour. He starts near zero, so
-  he can take it, but don't make a habit of it.
+  he can take it, but it gets him nowhere.
 
 </details>
 
@@ -681,9 +693,11 @@ Nadia has a whole beef with him that he has also slept through.
 
 > *"No, no, after you."*
 
-**Found in:** The Main Hall, standing at the exact edge of a conversation ·
-**Starts:** 🤢 Rough Shape · **Fit check:** cream shirt, navy trousers. Neutral.
-Pleasant. Designed to blend into any wall. Social-anxiety camouflage.
+**Found in:** The Rec Room in the basement, alone, standing at the exact edge of
+a conversation nobody else is in · **Starts:** 🤢 Rough Shape · **Fit check:** a
+short fade, a cream waistcoat and a tie. He's dressed almost exactly like the
+host, which explains a lot: half the party assumes he lives here, and the other
+half assumes he's catering.
 
 Nobody at this party can say who invited Yusuf. Yusuf is not offering. He is
 being extremely pleasant to somebody who does not know his name, and he has been
@@ -730,10 +744,12 @@ bad. They are also, currently, the saddest sitcom in the house.
 
 **Quiet.** He removes himself from the room before anyone can ask him to.
 
-- He starts in the Main Hall, the corridor that connects everything, so he's the
-  easiest quiet guest to move. Switch on music and he'll back away from it.
-- Like all the quiet guests, being chased by music raises his agitation every
-  hour it happens. He'll keep apologising. He'll still hate it.
+- He starts alone in the Rec Room, 38 steps from the lawn. His nearest way out
+  is the basement walkout, the exit nobody watches. Very Yusuf.
+- Don't try to shift him with the Rec Room speaker. He won't head for the
+  walkout. He'll back into the far corner of the Rec Room and stay there, more
+  wound up every hour: a day of it takes him from 6 agitation to 90. He'll keep
+  apologising. He'll still hate it.
 
 </details>
 
@@ -747,9 +763,9 @@ bad. They are also, currently, the saddest sitcom in the house.
 
 **Found in:** The Theater, where something nobody is watching has been playing
 since Saturday. Bex is filming the people not watching it. · **Starts:**
-🧟 Mutating · **Fit check:** platinum hair, black top, plum trousers. She looks
-like she's about to launch a podcast. She has been about to launch a podcast for
-three years.
+🧟 Mutating · **Fit check:** a platinum mohawk, a black jacket, a chain, and plum
+trousers. She looks like the drummer in a band that has never played a gig. She
+has been about to launch a podcast about it for three years.
 
 Bex has been recording since hour nine. She has not posted any of it. She has
 soft-launched this party zero times. Her drafts folder is the most exclusive club
@@ -798,8 +814,9 @@ unconscious for all of it.
 walls.
 
 - Lamps pull her in, and so does the surveillance PC's glowing monitor, which
-  lives in your off-limits bedroom. If Bex gets in there, she will film it. Put
-  the PC back to sleep when you're not using it.
+  lives in your off-limits bedroom upstairs. Leave it on and she's the first of
+  the light-chasers to get there. She will film it. Put the PC back to sleep
+  when you're not using it.
 - The Theater, where she starts, has its own lamp. Handy for keeping her in one
   place while you deal with everybody else.
 - She's already Mutating when the night begins, so she's on a shorter clock than
@@ -815,9 +832,10 @@ walls.
 
 > *"Right. Second dinner."*
 
-**Found in:** The Dining Room, the only person who has ever actually eaten at
-that table · **Starts:** 🧟 Mutating · **Fit check:** forest-green shirt, grey
-trousers, and a plate. Always a plate.
+**Found in:** The Dining Room, at the long banquet table, the only person who has
+ever actually eaten at it · **Starts:** 🧟 Mutating · **Fit check:** locs, a
+forest-green apron, and a plate. Always a plate. He has never cooked. He has
+never been asked to cook. The apron is for eating.
 
 Marlon has treated this party as a buffet with a social component. The social
 component is optional. The buffet is not.
@@ -883,16 +901,21 @@ fridge until something better turns up.
 
 > *You catch your reflection. You have been at this party for fifty-two hours too.*
 
-**Found in:** the middle of the Main Hall, within reach of both ends and within
-reach of absolutely no sleep · **Fit check:** white tee, dark jeans, no party
-colours. Deliberately plainer than everyone else. You're not a guest. You're
-management.
+**Found in:** The Foyer, eight steps from the lawn and within reach of absolutely
+no sleep · **Fit check:** a teal waistcoat, a tie, rolled-up ivory sleeves and
+dark jeans. You're dressed like the butler at your own party, and you're still
+the plainest person here. (Yusuf is dressed almost exactly the same. This has
+caused confusion.) You're not a guest. You're management.
 
 It was Priya's idea. It was your house. That's how it always goes.
 
-Your bedroom door was shut on Friday, and it is going to stay shut. It's the one
-room in the house that's still yours, and any guest found in there is a problem
-the neighbours will hear about.
+Your bedroom is upstairs. The door was shut on Friday, and it is going to stay
+shut. It's the one room in the house that's still yours, and any guest found in
+there is a problem the neighbours will hear about.
+
+The house has three floors: the ground floor, where the party is; upstairs, where
+the bedrooms are; and the basement. The stairs cost a minute, same as any other
+step.
 
 The rules are brutal. You can't throw anyone out. You can't hurt anyone. You have
 to make leaving *their idea*. It's Inception, but for going home.
@@ -940,6 +963,9 @@ What we know:
 - Sean has spent the entire fifty-two-hour party directly underneath it and has
   not come upstairs once. His noise-cancelling headphones deserve their own lore
   section.
+- The closest anybody from the party has come is Yusuf, who has spent two days
+  standing in the Rec Room, one door away. Neither of them has said hello. Both
+  are too polite.
 - Nobody at the party knows he exists, possibly including you. Is he your
   flatmate? Your cousin? Did he come with the house? The listing said "finished
   basement." It did not say "comes with Sean."
@@ -977,14 +1003,16 @@ which is what makes it hurt.*
 5. Moss can't face walking back through the Foyer with everyone looking at him,
    so he comes back in through the basement walkout, the exit nobody watches.
 6. Yusuf, who has been watching the front door, never sees Moss come back. Yusuf
-   concludes that Moss went home without him. Yusuf does not want to make a fuss.
+   concludes that Moss went home without him. Yusuf does not want to make a fuss,
+   so he goes down to the Rec Room, where nobody can see him not making a fuss.
 7. Moss, meanwhile, can't find Yusuf anywhere (Moss spends nine hours of the
    party in the bathroom) and concludes that Yusuf went home without *him*. Moss
    came with someone who already left. Moss says this is fine.
 8. **Now.** They have been in the same house for two days, each quietly convinced
    the other one abandoned him. Neither has texted the other, because neither
    wants to make it weird. They have walked past each other in the Main Hall at
-   least twice. Both of them said "sorry."
+   least twice. Both of them said "sorry." Right now Moss is in the Study and
+   Yusuf is in the Rec Room, one floor down. So close. So far.
 
 And the cruellest detail of all: the line *"Yusuf keeps looking at the door Moss
 went out of"* only ever plays when Yusuf is **standing right next to Moss.**
@@ -1155,14 +1183,14 @@ NPCs with more personality than some of the guests.
 |---|---|---|---|
 | Gary | 🔊 Heavy Bass | No | Park him with music, then nudge him out |
 | Denise | 🍕 Leftovers | No | Snack just outside the front door |
-| Moss | 🤫 Quiet (flees noise) | No | Music pushes him away from the speaker. Gently. |
+| Moss | 🤫 Quiet (flees noise) | No | Music only corners him. Walk him out, gently. |
 | Priya | 💡 Bright Light | No | Lamps to steer, nudges to finish, PC off |
 | Benno | 🍕 Leftovers | Yes | Snack on the lawn |
 | Roz | 💡 Bright Light | No | Already near the door. Nudge, kindly. |
 | Teddy | 🍕 Leftovers | Yes | Snack on the lawn |
 | Nadia | 🔊 Heavy Bass | No | Park her with music, then nudge her out |
-| Colm | 🤫 Quiet (flees noise) | No | Music moves him. Plan where "away" is. |
-| Yusuf | 🤫 Quiet (flees noise) | No | Music moves him, and the hall goes everywhere |
+| Colm | 🤫 Quiet (flees noise) | No | Music only corners him. Longest walk out of anyone. |
+| Yusuf | 🤫 Quiet (flees noise) | No | Basement walkout. Keep the Rec Room speaker off. |
 | Bex | 💡 Bright Light | No | Theater lamp holds her, PC off |
 | Marlon | 🍕 Leftovers | Yes | Snack on the lawn, early |
 
@@ -1172,6 +1200,8 @@ NPCs with more personality than some of the guests.
 - Anyone who reaches the lawn walks to the street on their own.
 - Music and lamps are for *parking* people, not for exits. Every speaker and
   every lamp is indoors.
+- Music doesn't herd the quiet guests. It backs them into a corner and winds
+  them up.
 - The surveillance PC's monitor is a lamp in your bedroom. Treat it like one.
 
 </details>

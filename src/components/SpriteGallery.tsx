@@ -1,4 +1,5 @@
 import Legend from './Legend';
+import CharacterBody from './CharacterBody';
 import PixelSprite from './PixelSprite';
 import { FOOD, PROPS, foodArt, furnitureArt, poseArt, type Art } from '../art';
 import { GUEST_SKINS } from '../art/palette';
@@ -51,6 +52,31 @@ export default function SpriteGallery() {
 
   return (
     <div className="plate p-4">
+      <Section title="The host & the last twelve standing">
+        <p className="mb-4 text-sm text-bone-dim">A tired host. Twelve distinct personalities. One very long night.</p>
+        <div className="grid grid-cols-4 gap-4 sm:grid-cols-7">
+          {[{ id: 'host', name: 'You', mutationStage: 0 as const }, ...guests].map((guest, index) => (
+            <figure key={guest.id} className="text-center">
+              <div className="relative mx-auto h-24 w-24 rounded bg-[#283039]">
+                <CharacterBody id={guest.id} stage={guest.mutationStage} phase={index * .31} label={guest.name} />
+              </div>
+              <figcaption className="mt-1 text-sm text-bone">{guest.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </Section>
+      <Section title="Motion study — idle / walk / walk north / dance">
+        <div className="flex gap-6">
+          {(['idle', 'walk', 'north', 'dance'] as const).map(mode => (
+            <figure key={mode}>
+              <div className="relative h-24 w-24 bg-[#283039]">
+                <CharacterBody id="host" stage={0} moving={mode === 'walk' || mode === 'north'} direction={mode === 'north' ? 'back' : 'front'} dancing={mode === 'dance'} label={mode} />
+              </div>
+              <figcaption className="mt-1 text-center text-sm text-bone-dim">{mode}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </Section>
       <Section title="Guests — four mutation stages each">
         <div className="space-y-3">
           {guestIds.map((id) => {

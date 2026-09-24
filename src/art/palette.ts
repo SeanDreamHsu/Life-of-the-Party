@@ -5,9 +5,8 @@ import type { MutationStage } from '../types/game';
  * PEOPLE INK
  *
  * Character sprites are authored against semantic slots, not literal colours:
- * 's' is "skin", not "#e0ac7e". One well-drawn pose therefore serves every
- * guest — swap the palette and you get a different person in the same posture.
- * Three guests x four mutation stages = twelve looks from four hand-drawn poses.
+ * 's' is "skin", not "#e0ac7e". Authored hair and outfit masks give each person their own silhouette.
+ * Palette ramps carry their identity through all four mutation stages.
  *
  *   .  transparent      o  outline        s  skin        d  skin shade
  *   h  hair             g  hair shade     e  eye         w  eye white
@@ -15,7 +14,7 @@ import type { MutationStage } from '../types/game';
  *   q  pants shade      b  shoe           n  ground shadow
  */
 
-const OUTLINE = '#17110d';
+const OUTLINE = '#211e2b';
 const MOUTH = '#5c2b28';
 const EYE_WHITE = '#f2ece2';
 const SHADOW = 'rgba(0,0,0,0.30)';
@@ -45,7 +44,7 @@ export interface GuestSkin {
   shoe: string;
 }
 
-/** One palette per guest, so the same pose reads as three different people. */
+/** Personal color ramps support the thirteen distinct character silhouettes. */
 export const GUEST_SKINS: Record<string, GuestSkin> = {
   'guest-gary': {
     skin: '#e0a878',
@@ -205,11 +204,16 @@ export function guestPalette(skin: GuestSkin, stage: MutationStage): PixelPalett
     s: mix(skin.skin, SICK_GREEN, rot),
     d: mix(skin.skinShade, SICK_GREEN, rot),
     h: skin.hair,
+    H: mix(skin.hair, '#f7d8aa', 0.28),
     g: skin.hairShade,
     e: stage === 3 ? FERAL_EYE : CALM_EYE,
     w: EYE_WHITE,
     m: MOUTH,
     t: skin.shirt,
+    r: mix(skin.shirt, '#fff0cc', 0.24),
+    a: '#e0b65e',
+    k: '#3e5364',
+    B: mix(skin.shoe, '#b8afac', 0.3),
     u: skin.shirtShade,
     p: skin.pants,
     q: skin.pantsShade,
@@ -294,7 +298,7 @@ export const OBJECT_PALETTE: PixelPalette = {
 };
 
 /**
- * The host — you. Deliberately plainer than the guests: white tee, dark jeans,
+ * The host — you. Deliberately plainer than the guests: teal waistcoat, rolled ivory sleeves, dark jeans,
  * no party colours. You are the only person here still trying.
  */
 export const HOST_SKIN: GuestSkin = {
@@ -302,8 +306,8 @@ export const HOST_SKIN: GuestSkin = {
   skinShade: '#b57a4f',
   hair: '#2e2620',
   hairShade: '#1a1512',
-  shirt: '#dcd8cf',
-  shirtShade: '#b2ada2',
+  shirt: '#477e83',
+  shirtShade: '#2a515f',
   pants: '#2f3a4a',
   pantsShade: '#222b37',
   shoe: '#1b1611',

@@ -48,3 +48,22 @@ export const RUGS = {
 } as const;
 
 export type RugId = keyof typeof RUGS;
+
+
+/** Sized at native resolution so a large rug keeps the same pixel grain as the floor. */
+export function roomRug(id: string, width: number, height: number): PixelGrid {
+  const [border, field, accent] = WEAVES[id === 'rugRed' ? 0 : id === 'rugBlue' ? 1 : 2] ?? ['R', 'r', 'f'];
+  return Array.from({ length: height }, (_, y) => Array.from({ length: width }, (_, x) => {
+    const edge = Math.min(x, y, width - 1 - x, height - 1 - y);
+    if (edge === 0) return (x + y) % 2 ? '.' : 'I';
+    if (edge < 3) return border;
+    if (edge === 3 || edge === 6) return accent;
+    if (edge < 9) return border;
+    const diamond = Math.abs(x - (width - 1) / 2) + Math.abs(y - (height - 1) / 2);
+    if (Math.abs(diamond - Math.min(width, height) * .3) < 2) return accent;
+    if (diamond < 4) return accent;
+    if ((x + 3 * y) % 19 === 0) return border;
+    if (edge < 12 && (x + y) % 6 === 0) return accent;
+    return field;
+  }).join(''));
+}

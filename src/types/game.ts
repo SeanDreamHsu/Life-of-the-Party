@@ -84,6 +84,8 @@ export const OUTDOOR_KINDS: readonly TileKind[] = ['yard', 'path', 'street'];
 export interface Decor {
   id: string;
   art: PropId;
+  /** Native tile dimensions, for floor textiles only; never a collision footprint. */
+  floorSize?: readonly [number, number];
   x: number;
   y: number;
   /** Whether a guest may walk over this tile. */

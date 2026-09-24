@@ -2,6 +2,7 @@ import { breadcrumbs, WHOLE_LOT, type Camera } from '../game/camera';
 
 interface CameraBarProps {
   camera: Camera;
+  floorName: string;
   onMove: (camera: Camera) => void;
 }
 
@@ -15,10 +16,10 @@ interface CameraBarProps {
  * Hidden entirely at the top level: when there is nowhere to go back to, a
  * breadcrumb saying "The House" is just a label taking up room.
  */
-export default function CameraBar({ camera, onMove }: CameraBarProps) {
+export default function CameraBar({ camera, floorName, onMove }: CameraBarProps) {
   if (camera.level === 'lot') return null;
 
-  const trail = breadcrumbs(camera);
+  const trail = breadcrumbs(camera).map((crumb, index) => index === 0 ? { ...crumb, label: floorName } : crumb);
 
   return (
     <div className="plate flex items-center gap-1 px-2.5 py-1.5">
@@ -42,7 +43,7 @@ export default function CameraBar({ camera, onMove }: CameraBarProps) {
       <button
         type="button"
         onClick={() => onMove(WHOLE_LOT)}
-        title="Pull all the way back to the whole house (Esc)"
+        title="View the whole floor (Esc)"
         className="ghostbtn ml-2 px-2 py-0.5 text-[0.72rem]"
       >
         Pull back

@@ -1,3 +1,4 @@
+import { floorNeighbours } from '../data/floors';
 import type { Snack } from './actions';
 import type { Position } from './state';
 import {
@@ -29,14 +30,6 @@ import {
 export function key(x: number, y: number): string {
   return `${x},${y}`;
 }
-
-/** Orthogonal steps only — the house is drawn on a square grid, not a diagonal one. */
-const STEPS: readonly (readonly [number, number])[] = [
-  [0, -1],
-  [0, 1],
-  [-1, 0],
-  [1, 0],
-];
 
 export type Blocker = (x: number, y: number) => boolean;
 
@@ -70,9 +63,7 @@ export function distanceField(
     if (!at) continue;
     const here = dist.get(key(at.x, at.y)) ?? 0;
 
-    for (const [dx, dy] of STEPS) {
-      const nx = at.x + dx;
-      const ny = at.y + dy;
+    for (const { x: nx, y: ny } of floorNeighbours(grid, at)) {
       const nk = key(nx, ny);
       if (dist.has(nk)) continue;
       if (!tileAt(grid, nx, ny)) continue;
@@ -162,9 +153,7 @@ const RAIDING_STAGE: MutationStage = 2;
 /** Walkable neighbours of a tile, in a fixed order. */
 function neighbourhood(grid: Grid, blocked: Blocker, at: Position): Position[] {
   const out: Position[] = [];
-  for (const [dx, dy] of STEPS) {
-    const nx = at.x + dx;
-    const ny = at.y + dy;
+  for (const { x: nx, y: ny } of floorNeighbours(grid, at)) {
     if (!tileAt(grid, nx, ny)) continue;
     if (blocked(nx, ny)) continue;
     out.push({ x: nx, y: ny });

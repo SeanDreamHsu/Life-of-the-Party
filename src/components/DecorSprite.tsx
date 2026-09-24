@@ -1,5 +1,8 @@
 import PixelSprite from './PixelSprite';
 import { furnitureArt } from '../art';
+import { roomRug } from '../art/sprites/rugs';
+import { OBJECT_PALETTE } from '../art/palette';
+import { useMemo } from 'react';
 import { GRID_HEIGHT, GRID_WIDTH } from '../data/houseMap';
 import type { Decor } from '../types/game';
 
@@ -12,7 +15,6 @@ const CELL_H = 100 / GRID_HEIGHT;
  * by a fraction of the board scale and the pixels stop being square.
  */
 const OVERSCAN = 2;
-const OFFSET = (OVERSCAN - 1) / 2;
 
 interface DecorSpriteProps {
   item: Decor;
@@ -20,6 +22,13 @@ interface DecorSpriteProps {
 }
 
 export default function DecorSprite({ item, isSelected }: DecorSpriteProps) {
+  const width = item.floorSize?.[0] ?? OVERSCAN;
+  const height = item.floorSize?.[1] ?? OVERSCAN;
+  const art = useMemo(() => item.floorSize ? {
+    cacheKey: `rug:${item.art}:${width}:${height}`,
+    grid: roomRug(item.art, width * 16, height * 16),
+    palette: OBJECT_PALETTE,
+  } : furnitureArt(item.art), [item.art, item.floorSize, width, height]);
   return (
     <div
       className="absolute"
@@ -33,16 +42,16 @@ export default function DecorSprite({ item, isSelected }: DecorSpriteProps) {
       <div
         className="absolute"
         style={{
-          left: `${-OFFSET * 100}%`,
-          top: `${-OFFSET * 100}%`,
-          width: `${OVERSCAN * 100}%`,
-          height: `${OVERSCAN * 100}%`,
+          left: `${-(width - 1) * 50}%`,
+          top: `${-(height - 1) * 50}%`,
+          width: `${width * 100}%`,
+          height: `${height * 100}%`,
         }}
       >
         {isSelected && (
           <div className="absolute inset-[18%] rounded-md bg-white/20 ring-2 ring-white/90" />
         )}
-        <PixelSprite art={furnitureArt(item.art)} className="relative h-full w-full" />
+        <PixelSprite art={art} className="relative h-full w-full" />
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { floorAt, floorPoint } from '../data/floors';
 import { applyIntents, planGuestMoves, readBoard, type GuestIntent } from './ai';
 import { ambientLine, collectBarks, familiarityGain } from './barks';
 import { describeIntrusion, describeMove, describeMutation } from './narrate';
@@ -181,7 +182,8 @@ export function resolveTurn(input: ResolutionInput): ResolutionResult {
     // Anyone within earshot of live music dances. Everyone, not just the guest
     // who secretly wants bass — otherwise dancing would give the lure away.
     const dancing = signals.noise.some(
-      (source) => Math.abs(source.x - guest.x) + Math.abs(source.y - guest.y) <= 4,
+      (source) => floorAt(source.x, source.y) === floorAt(guest.x, guest.y)
+        && Math.abs(source.x - guest.x) + Math.abs(floorPoint(source).y - floorPoint(guest).y) <= 4,
     );
 
     return {

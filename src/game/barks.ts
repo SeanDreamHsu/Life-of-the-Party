@@ -1,3 +1,4 @@
+import { adjacentOnFloor, floorAt, floorPoint } from '../data/floors';
 import type { GuestIntent } from './ai';
 import { AMBIENT, CAST, pickIndex, type AmbientContext, type BarkTrigger } from './cast';
 import type { Position } from './state';
@@ -59,8 +60,7 @@ function relationshipLine(guest: Guest, guests: readonly Guest[], turn: number):
 
   for (const other of guests) {
     if (other.id === guest.id) continue;
-    const distance = Math.abs(other.x - guest.x) + Math.abs(other.y - guest.y);
-    if (distance > 1) continue;
+    if (!adjacentOnFloor(other, guest)) continue;
 
     const lines = profile.aboutOthers[other.id];
     if (!lines || lines.length === 0) continue;
@@ -126,7 +126,9 @@ export function ambientLine(context: AmbientContext): string | null {
 
 /** Hours spent near the host. You learn about people by being around them. */
 export function familiarityGain(guest: Guest, host: Position): number {
-  const distance = Math.abs(guest.x - host.x) + Math.abs(guest.y - host.y);
+  if (floorAt(guest.x, guest.y) !== floorAt(host.x, host.y)) return 0;
+  const a = floorPoint(guest), b = floorPoint(host);
+  const distance = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
   if (distance <= 3) return 3;
   if (distance <= 7) return 1;
   return 0;
