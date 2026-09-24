@@ -30,6 +30,8 @@ export const CHARACTER_LOOKS: Record<string, CharacterLook> = {
   'guest-yusuf': { hair: 'fade', outfit: 'vest', accessory: 'tie' },
   'guest-bex': { hair: 'mohawk', outfit: 'jacket', accessory: 'chain' },
   'guest-marlon': { hair: 'locs', outfit: 'apron', accessory: 'none', broad: true },
+  // The tutorial's stranger. Without a look of its own it fell back to the host's and read as you.
+  'guest-demo': { hair: 'swept', outfit: 'hoodie', accessory: 'none' },
 };
 
 const HAIR: Record<Hair, PixelGrid> = {

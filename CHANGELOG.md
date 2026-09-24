@@ -105,6 +105,13 @@ AI priorities and the minute/suspicion/agitation economy are unchanged.
     marked with one of the game's own sprites, and dates print in the
     reader's own time zone.
 
+### Fixed
+
+- The tutorial's stranger (the lure demo and the mutation diagram) has a look
+  of its own again. The redesign gave looks to the host and the twelve guests
+  only, so the stranger fell back to the host's and appeared as a grey copy of
+  the player.
+
 ### Docs
 
 - **`CHARACTERS.md`**, a character bible for all twelve guests, the host and the
