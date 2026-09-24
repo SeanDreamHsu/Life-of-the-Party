@@ -24,6 +24,7 @@ import {
 import { CAST, type BarkTrigger } from '../src/game/cast';
 import { createInitialGuests } from '../src/data/initialState';
 import { LURE_META, MUTATION_META, type LureType, type MutationStage } from '../src/types/game';
+import { ago, calendarDate, latestCommits, MILESTONES, REPO_URL, type Commit } from './devlog';
 import { auditFont } from './pixel-font';
 import { confetti, decode, pixelCursors, pixelWipe, pixelWord } from './pixel-fx';
 
@@ -852,6 +853,80 @@ if (!calm) {
     });
   });
 }
+
+/* ================================================ FOLLOW THE DEVELOPMENT */
+
+const timeline = byId('timeline');
+const stops = MILESTONES.map((milestone) => {
+  const item = make('li', milestone.now ? 'milestone now' : 'milestone');
+  const node = make('span', 'node well');
+  node.setAttribute('aria-hidden', 'true');
+  const icon = make('span', 'sprite');
+  paint(icon, milestone.icon);
+  node.append(icon);
+
+  let date: HTMLElement = make('span', 'when', 'Before git');
+  if (milestone.when) {
+    const time = make('time', '', calendarDate(milestone.when));
+    time.dateTime = milestone.when;
+    date = time;
+  }
+  const title = make('h3', '', milestone.title);
+  if (milestone.now) title.append(' ', make('span', 'here', 'You are here'));
+  item.append(node, date, title, make('p', '', milestone.text));
+  if (milestone.link) {
+    const link = make('a', '', `${milestone.link.label} →`);
+    link.href = milestone.link.href;
+    item.append(link);
+  }
+  timeline.append(item);
+  return item;
+});
+// Built here rather than in the markup, so the generic [data-reveal] pass has
+// already run; each stop brings itself in instead.
+if (!calm) {
+  utils.set(stops, { opacity: 0 });
+  stops.forEach((stop) => {
+    onFirstSight(stop, () => {
+      animate(stop, { opacity: [0, 1], x: [-28, 0], duration: 700, ease: 'out(3)' });
+    });
+  });
+}
+
+const commitList = byId('commits');
+function showCommits(commits: readonly Commit[]): void {
+  if (commits.length === 0) throw new Error('GitHub sent no commits');
+  commitList.replaceChildren(
+    ...commits.map((commit) => {
+      const item = make('li');
+      const sha = make('a', 'sha', commit.sha.slice(0, 7));
+      sha.href = commit.url;
+      const title = make('span', 'commit-title');
+      // Real spaces between the badges and the words, not just margins: a screen
+      // reader would otherwise run them together.
+      if (commit.merged) title.append(make('span', 'merged', 'Merged'), ' ');
+      title.append(commit.title);
+      const when = make('time', '', ago(commit.when));
+      when.dateTime = commit.when;
+      when.title = calendarDate(commit.when);
+      item.append(sha, title, when);
+      return item;
+    }),
+  );
+}
+// Asked for only once somebody scrolls this far: GitHub's anonymous allowance
+// is small, and most visits never reach the log.
+onFirstSight(commitList, () => {
+  latestCommits(5)
+    .then(showCommits)
+    .catch(() => {
+      const note = make('li', 'commit-note', "GitHub isn't answering right now. ");
+      const link = make('a', '', 'The full history is over there.');
+      link.href = `${REPO_URL}/commits/main`;
+      note.append(link);
+      commitList.replaceChildren(note);
+    });
+});
 
 /* ============================================================ PIXEL BITS */
 

@@ -500,6 +500,71 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .data-controls { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; margin-top: 16px; }
 .data-controls span { color: var(--bone-dim); font-variant: small-caps; letter-spacing: .05em; }
 
+/* -------------------------------------------------------------- devlog */
+
+/* Two columns: how to follow along on the left, how it got here on the right. */
+.devlog {
+  display: grid; gap: clamp(32px, 5vw, 72px);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+}
+/* The follow column stays put while the timeline scrolls past it, clear of the fixed nav. */
+.devlog-follow { position: sticky; top: 96px; }
+@media (max-width: 900px) {
+  .devlog { grid-template-columns: 1fr; }
+  .devlog-follow { position: static; }
+}
+.follow-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0; }
+.follow-links .btn { min-height: 42px; padding: .5em 1.1em; font-size: .98rem; }
+
+.workbench { padding: 18px 20px; }
+.workbench .legend { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; }
+/* Stepped, not faded: an LED is on or it is off. */
+.live {
+  width: 8px; height: 8px; flex: none;
+  background: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink);
+  animation: blink 1.2s steps(2, jump-none) infinite;
+}
+@keyframes blink { 50% { opacity: .35; } }
+.commits { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.commits li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1px 12px; align-items: baseline; }
+.commits .sha { grid-row: span 2; font-family: var(--pixel); font-size: .78rem; color: var(--brass); text-decoration: none; }
+.commits .sha:hover { color: var(--bone); }
+/* Not `.title`: the hero headline already owns that name, at nine rem. */
+.commits .commit-title { color: var(--bone); overflow-wrap: anywhere; }
+.commits .merged { font-family: var(--pixel); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--moss); margin-right: 2px; }
+.commits time { font-family: var(--pixel); font-size: .72rem; letter-spacing: .06em; color: var(--bone-dim); }
+.commit-note { color: var(--bone-dim); font-style: italic; }
+.commit-note a { color: var(--brass); }
+
+/* The timeline: a dashed brass track, one of the game's own sprites at every stop. */
+.timeline { list-style: none; margin: 0; padding: 0 0 0 76px; position: relative; display: grid; gap: 36px; }
+.timeline::before {
+  content: ""; position: absolute; left: 29px; top: 12px; bottom: 12px; width: 4px;
+  background: repeating-linear-gradient(180deg, var(--brass) 0 8px, transparent 8px 14px);
+  opacity: .65;
+}
+.milestone { position: relative; }
+.milestone .node { position: absolute; left: -76px; top: -4px; width: 62px; height: 62px; padding: 6px; }
+.milestone .node .sprite { display: block; width: 100%; height: 100%; }
+.milestone time, .milestone .when {
+  display: block; margin-bottom: 4px;
+  font-family: var(--pixel); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--brass);
+}
+.milestone h3 { margin: 0 0 6px; font-size: 1.4rem; font-weight: 400; line-height: 1.2; }
+.milestone p { margin: 0; color: var(--bone-dim); }
+.milestone a { display: inline-block; margin-top: 8px; font-variant: small-caps; letter-spacing: .05em; color: var(--brass); text-decoration: none; }
+.milestone a:hover { color: var(--bone); }
+.milestone.now .node { box-shadow: 0 0 0 2px var(--brass), 0 0 24px rgba(200,162,74,.5); }
+.here {
+  display: inline-block; margin-left: 6px; padding: 1px 7px; vertical-align: .15em;
+  font-family: var(--pixel); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+  color: #2a1c0c; background: var(--brass); border-radius: 2px;
+  animation: blink 1.4s steps(2, jump-none) infinite;
+}
+.timeline-next { margin: 36px 0 0 76px; color: var(--bone-dim); font-style: italic; }
+.timeline-next a { color: var(--brass); }
+
 /* ------------------------------------------------------------- roadmap */
 
 .road { position: relative; display: grid; gap: 28px; padding-left: 44px; }
@@ -567,6 +632,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .beams, [class*="anim-"], .dancing { animation: none !important; }
+  .beams, [class*="anim-"], .dancing, .live, .here { animation: none !important; }
   .ticker { overflow-x: auto; }
 }

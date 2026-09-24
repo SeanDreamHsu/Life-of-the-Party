@@ -94,6 +94,16 @@ AI priorities and the minute/suspicion/agitation economy are unchanged.
 
   Every effect stands down under `prefers-reduced-motion`, and the overlays
   never take a click.
+- **"Follow the development" on the landing page**, a new section before the
+  roadmap (now numbered 08), with a "The Log" link in the nav.
+  - Follow links: GitHub, a commit RSS feed and the changelog.
+  - A live feed of the newest commits on main, read from GitHub's API
+    (`landing/devlog.ts`). It is only requested once the section scrolls into
+    view, cached for ten minutes, and falls back to a link if GitHub is
+    unreachable.
+  - A hand-written timeline from the original brief to today. Each stop is
+    marked with one of the game's own sprites, and dates print in the
+    reader's own time zone.
 
 ### Docs
 
