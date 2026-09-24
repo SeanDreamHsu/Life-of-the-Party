@@ -82,6 +82,18 @@ AI priorities and the minute/suspicion/agitation economy are unchanged.
   text. Animation is anime.js v4; `prefers-reduced-motion` is honoured
   throughout. Built on the redesign above, so its cast, host and demos draw
   the new character art.
+- **Pixel effects on the landing page**, each authored as text like the
+  sprites (`landing/pixel-fx.ts`, `landing/pixel-font.ts`):
+  - pixel cursors: an arrow, a pointing hand, and a party-pink crosshair over
+    the dance floor
+  - a confetti trail behind the mouse and a pop on every click
+  - section labels that decode like an old display
+  - a pixel dissolve on the way into the game
+  - a giant "HOUR 52" in a new 5×7 pixel font. Its pixels scatter away from
+    the mouse; poke it and it blows apart and reassembles as the next hour.
+
+  Every effect stands down under `prefers-reduced-motion`, and the overlays
+  never take a click.
 
 ### Docs
 

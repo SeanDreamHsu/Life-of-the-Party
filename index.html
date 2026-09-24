@@ -305,7 +305,16 @@
 
       <!-- ========================================================== FINALE -->
       <section class="section finale">
-        <p class="kicker">It's hour fifty-two</p>
+        <p class="kicker" id="finaleKicker">It's hour fifty-two</p>
+        <button
+          class="pixel-word"
+          id="pixelWord"
+          type="button"
+          aria-label="Hour 52. Poke it to keep the party going."
+        >
+          <canvas id="pixelWordCanvas" aria-hidden="true"></canvas>
+        </button>
+        <p class="pixel-hint" aria-hidden="true">Wave at it. Poke it.</p>
         <h2 class="h2">The party is <em>still going.</em></h2>
         <div class="cta">
           <a class="btn btn-brass" href="./play/">Play the alpha</a>

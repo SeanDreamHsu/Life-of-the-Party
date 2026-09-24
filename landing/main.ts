@@ -24,6 +24,8 @@ import {
 import { CAST, type BarkTrigger } from '../src/game/cast';
 import { createInitialGuests } from '../src/data/initialState';
 import { LURE_META, MUTATION_META, type LureType, type MutationStage } from '../src/types/game';
+import { auditFont } from './pixel-font';
+import { confetti, decode, pixelCursors, pixelWipe, pixelWord } from './pixel-fx';
 
 /**
  * THE LANDING PAGE
@@ -850,3 +852,42 @@ if (!calm) {
     });
   });
 }
+
+/* ============================================================ PIXEL BITS */
+
+for (const problem of auditFont()) console.error(problem);
+
+pixelCursors();
+confetti(calm);
+pixelWipe(calm);
+
+// Every section label arrives the way an old display would print it.
+document.querySelectorAll<HTMLElement>('.kicker').forEach((kicker) => {
+  onFirstSight(kicker, () => decode(kicker, kicker.textContent ?? '', calm));
+});
+
+const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+/** 52 is "fifty-two". The clock only ever reads between fifty-two and ninety-nine. */
+function inWords(n: number): string {
+  const tens = TENS[Math.floor(n / 10)] ?? '';
+  const ones = ONES[n % 10] ?? '';
+  return ones ? `${tens}-${ones}` : tens;
+}
+
+// The finale's hour is a toy: poke it and the party moves on an hour, and the
+// label above it keeps up.
+const finaleKicker = byId('finaleKicker');
+const pixelButton = byId<HTMLButtonElement>('pixelWord');
+pixelWord(pixelButton, byId<HTMLCanvasElement>('pixelWordCanvas'), calm, (stop) => {
+  const line =
+    stop.hour !== null
+      ? `It's hour ${inWords(stop.hour)}`
+      : stop.word === 'NOPE.'
+        ? 'Nobody goes home'
+        : 'Somebody suggests going home';
+  decode(finaleKicker, line, calm);
+  const spoken =
+    stop.hour !== null ? `Hour ${stop.hour}.` : stop.word === 'NOPE.' ? 'Nope.' : 'Go home?';
+  pixelButton.setAttribute('aria-label', `${spoken} Poke it to keep the party going.`);
+});

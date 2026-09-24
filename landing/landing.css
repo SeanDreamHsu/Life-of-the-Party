@@ -524,6 +524,40 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .finale .h2 { font-size: clamp(2.4rem, 7vw, 5.4rem); max-width: 14ch; margin-inline: auto; }
 .finale .crowd { padding: 0; margin-top: 40px; }
 
+/* ---------------------------------------------------------- pixel bits */
+
+/*
+ * Pixel cursors, painted from strings in pixel-fx.ts and handed over as
+ * custom properties. Only for a real mouse: a touch screen has no cursor, and
+ * until the properties exist every rule here falls back to the usual one.
+ */
+@media (pointer: fine) {
+  html { cursor: var(--cursor-arrow, auto); }
+  a, button, summary, label { cursor: var(--cursor-hand, pointer); }
+  .hero { cursor: var(--cursor-cross, crosshair); }
+  .hero a, .hero button { cursor: var(--cursor-hand, pointer); }
+}
+
+/* Drawn at a fraction of screen resolution and scaled up: every piece a square. */
+.confetti, .wipe {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  image-rendering: pixelated;
+}
+.confetti { z-index: 60; pointer-events: none; }
+/* The wipe does take clicks, for its half-second: nothing to press twice. */
+.wipe { z-index: 100; }
+
+.pixel-word {
+  display: block; width: min(100%, 760px); margin: 8px auto 0; padding: 0;
+  background: none; border: 0; border-radius: 2px;
+}
+.pixel-word canvas { display: block; width: 100%; }
+.pixel-hint {
+  margin: 4px 0 26px;
+  font-family: var(--pixel); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--bone-dim);
+}
+
 .foot {
   border-top: 1px solid var(--brass-dim);
   padding: 28px var(--gutter);
