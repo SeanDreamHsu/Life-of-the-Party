@@ -13,7 +13,7 @@ import { useBoardView } from './useBoardScale';
 import { usePan } from './usePan';
 import { atlasPoint, FLOOR_VIEW, floorPoint, visibleOnFloor, floorAt, floorForWing, floorInfo, stairsOnFloor, type FloorId } from '../data/floors';
 import { GRID_HEIGHT, GRID_WIDTH } from '../data/houseMap';
-import { focusOf, sectionsOf, type Camera } from '../game/camera';
+import { focusOf, hallFocus, sectionsOf, type Camera } from '../game/camera';
 import { collectLights } from '../game/lights';
 import { availableActions, type ActionOption, type GameState, type Projection } from '../game/state';
 import { placeAt, roomById } from '../data/rooms';
@@ -54,7 +54,9 @@ export default function GameBoard({
   const { grid, decor, selected } = state;
   const viewport = useRef<HTMLDivElement>(null);
   const visible = (position: { x: number; y: number }) => visibleOnFloor(position, floor);
-  const focus = camera.level === 'lot' ? FLOOR_VIEW : floorPoint(focusOf(camera));
+  const sourceRoom = camera.level === 'room' && camera.roomId ? roomById(camera.roomId) : undefined;
+  const hall = sourceRoom ? hallFocus(sourceRoom, projection.host) : null;
+  const focus = camera.level === 'lot' ? FLOOR_VIEW : floorPoint(hall ?? focusOf(camera));
   const board = useBoardView(focus, viewport, true);
   const sections = sectionsOf(camera).filter(section => floorForWing(section.target.wingId) === floor && section.target.wingId !== 'grounds').map(floorPoint);
   const stairs = useMemo(() => stairsOnFloor(grid, floor), [grid, floor]);
@@ -62,7 +64,6 @@ export default function GameBoard({
   const stairDestination = standingStair ? tileAt(grid, standingStair.to.x, standingStair.to.y) : undefined;
   const canTakeStairs = state.minutes > 0 && stairDestination !== undefined
     && availableActions(state, projection, stairDestination).some(action => action.kind === 'move');
-  const sourceRoom = camera.level === 'room' && camera.roomId ? roomById(camera.roomId) : undefined;
 
   const focusedRoom = sourceRoom ? floorPoint(sourceRoom) : undefined;
   const viewSelected = selected ? floorPoint(selected) : null;

@@ -151,6 +151,12 @@ different screen. Camera levels store **ids, never rectangles** — rooms move w
 the house is remodelled, and a stored rectangle would quietly point at the wrong
 part of the map afterwards.
 
+Play opens on the host's room, and while the view is on the host it follows them
+from room to room and up and down the stairs. The halls run the width of the
+house, so there the view frames the stretch of hall around the host rather than
+all of it. On most laptop screens the whole floor only fits at half size, which
+is too small to read the characters, so it is kept for planning.
+
 ### The house
 
 Nothing about the map is hand-typed. The building is generated from room

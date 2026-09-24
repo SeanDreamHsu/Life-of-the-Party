@@ -25,7 +25,7 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Give Ground Floor, Upper Floor and Basement the same 56 × 25 footprint and
   screen origin. Only the selected storey renders; switching floors retains the
-  overview scale. Start with the whole ground floor visible.
+  overview scale.
 - Expand the upper and basement rooms into their own storeys. Add shared rear
   landings and move the existing furniture groups into the deeper rooms.
 - Add visible stair flights between ground/upper and ground/basement, plus a
@@ -107,6 +107,21 @@ AI priorities and the minute/suspicion/agitation economy are unchanged.
 
 ### Fixed
 
+- **The redesigned characters are big enough to see while you play.** The game
+  opened on the whole floor, which on most laptop screens only fits at half
+  size. Every character was drawn 16 pixels tall, half the old game's size, and
+  the new hair, outfits and accessories were lost.
+  - Play now opens on the host's room.
+  - While the view is on the host, it follows them from room to room and up
+    and down the stairs, including planned moves and undo.
+  - The halls, which run the width of the house, frame the stretch around the
+    host.
+  - A movement key pressed while browsing another floor brings the view back
+    to the host.
+  - A view you choose yourself stays put.
+
+  On 1280–1920px screens characters now draw at 64–160 pixels throughout play,
+  and the whole floor is still one step out for planning.
 - The tutorial's stranger (the lure demo and the mutation diagram) has a look
   of its own again. The redesign gave looks to the host and the twelve guests
   only, so the stranger fell back to the host's and appeared as a grey copy of

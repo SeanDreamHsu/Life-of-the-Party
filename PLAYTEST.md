@@ -15,6 +15,10 @@ Use **WASD** or the **arrow keys** to queue movement, at one minute per tile.
 Keyboard movement pauses while help, the sprite gallery, or feedback is open,
 and while typing in a field or using the room selector.
 
+The view opens on the host’s room and follows the host from room to room and
+up and down the stairs. Choose **Whole floor** in the room menu, or press
+**Escape**, to see more of the house; a view you choose stays put.
+
 Press **F** to focus the host’s current room and floor, including planned moves.
 Change this shortcut in **Settings → Focus on the host**; the browser remembers
 the chosen key. **Reset to F** restores the default.

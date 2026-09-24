@@ -47,6 +47,11 @@ export function cameraAtHost(grid: Grid, host: { x: number; y: number }): Camera
     ? { level: 'room', wingId: room.wing, roomId: room.id } : WHOLE_LOT;
 }
 
+/** Whether two cameras frame the same place. */
+export function sameCamera(a: Camera, b: Camera): boolean {
+  return a.level === b.level && a.wingId === b.wingId && a.roomId === b.roomId;
+}
+
 export interface Focus {
   x: number;
   y: number;
@@ -79,6 +84,26 @@ export function focusOf(camera: Camera): Focus {
   }
 
   return { x: 0, y: 0, w: GRID_WIDTH, h: GRID_HEIGHT };
+}
+
+/** How much of a hall, in tiles, the view keeps around a host walking it. */
+const HALL_WINDOW = 16;
+
+/**
+ * The halls run the width of the house, so framing a whole one needs the
+ * whole floor's width, and on most laptop screens that only fits at half size.
+ * While the host is in a hall the view frames the stretch around them instead,
+ * sliding along as they walk. Null when the host is not in this room (or in a
+ * doorway onto it) or the room is not a hall.
+ */
+export function hallFocus(room: Room, host: { x: number; y: number }): Focus | null {
+  const pad = PADDING.room;
+  const inside = host.x >= room.x - pad && host.x < room.x + room.w + pad
+    && host.y >= room.y - pad && host.y < room.y + room.h + pad;
+  if (!inside || room.h > 2) return null;
+  const w = Math.min(HALL_WINDOW, room.w + pad * 2);
+  const x = Math.min(Math.max(host.x - Math.floor(w / 2), room.x - pad), room.x + room.w + pad - w);
+  return { x, y: room.y - pad, w, h: room.h + pad * 2 };
 }
 
 /**

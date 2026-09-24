@@ -18,7 +18,7 @@ import { auditLayout } from './data/auditLayout';
 import { auditHouseMap } from './data/houseMap';
 import { auditFloorPlan } from './data/floorplan';
 import { auditRooms, ROOMS } from './data/rooms';
-import { cameraAtHost, WHOLE_LOT, zoomOut, type Camera } from './game/camera';
+import { cameraAtHost, sameCamera, WHOLE_LOT, zoomOut, type Camera } from './game/camera';
 import {
   availableActions,
   createInitialState,
@@ -66,7 +66,9 @@ export default function App() {
   const [showSecrets, setShowSecrets] = useState(false);
   // How far into the house we are looking. A view concern, so it lives here
   // rather than in the reducer — zooming is not a move and must not be undoable.
-  const [camera, setCamera] = useState<Camera>(WHOLE_LOT);
+  // It opens on the host's room: on most laptop screens the whole floor only
+  // fits at half size, which shrinks every character to a smudge.
+  const [camera, setCamera] = useState<Camera>(() => cameraAtHost(state.grid, state.host));
   // A new player should not have to find the help screen; it finds them.
   const [showTutorial, setShowTutorial] = useState(isFirstVisit);
 
@@ -122,19 +124,29 @@ export default function App() {
 
   const projection = useMemo(() => project(state), [state]);
   const hostFloor = floorAt(projection.host.x, projection.host.y);
+  const hostCamera = useMemo(() => cameraAtHost(state.grid, projection.host), [state.grid, projection.host]);
   const focusHost = useCallback(() => {
     setActiveFloor(hostFloor);
-    setCamera(cameraAtHost(state.grid, projection.host));
+    setCamera(hostCamera);
     setFocusRevision(value => value + 1);
     dispatch({ type: 'selectTile', tile: null });
-  }, [hostFloor, state.grid, projection.host]);
-  const previousHostFloor = useRef(hostFloor);
+  }, [hostFloor, hostCamera]);
+  const previousHost = useRef({ floor: hostFloor, camera: hostCamera });
   useEffect(() => {
-    // Browsing another floor is free. Only an actual host crossing changes the
-    // view automatically, including undoing a planned stair move.
-    if (previousHostFloor.current !== hostFloor) chooseFloor(hostFloor);
-    previousHostFloor.current = hostFloor;
-  }, [hostFloor, chooseFloor]);
+    const was = previousHost.current;
+    previousHost.current = { floor: hostFloor, camera: hostCamera };
+    if (was.floor === hostFloor && sameCamera(was.camera, hostCamera)) return;
+    if (activeFloor === was.floor && sameCamera(camera, was.camera)) {
+      // A view on the host stays on the host: into the next room, up the
+      // stairs, and back again on an undo.
+      if (was.floor !== hostFloor) chooseFloor(hostFloor);
+      setCamera(hostCamera);
+    } else if (was.floor !== hostFloor) {
+      // Browsing another floor is free. Only an actual host crossing changes the
+      // view automatically, including undoing a planned stair move.
+      chooseFloor(hostFloor);
+    }
+  }, [hostFloor, hostCamera, activeFloor, camera, chooseFloor]);
 
   useEffect(() => {
     function onMoveKey(event: KeyboardEvent): void {
@@ -150,12 +162,12 @@ export default function App() {
       const direction = MOVE_KEYS[event.key.toLowerCase()];
       if (!direction) return;
       event.preventDefault();
-      if (activeFloor !== hostFloor) { chooseFloor(hostFloor); return; }
+      if (activeFloor !== hostFloor) { focusHost(); return; }
       dispatch({ type: 'queueMove', direction });
     }
     window.addEventListener('keydown', onMoveKey);
     return () => window.removeEventListener('keydown', onMoveKey);
-  }, [showTutorial, showGallery, activeFloor, hostFloor, chooseFloor, focusKey, focusHost]);
+  }, [showTutorial, showGallery, activeFloor, hostFloor, focusKey, focusHost]);
 
   const menuOptions = useMemo(
     () => (state.selected ? availableActions(state, projection, state.selected) : []),
