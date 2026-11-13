@@ -1315,6 +1315,6 @@ function boot(): void {
   overlay = 'title';
   document.body.classList.add('title');
   requestAnimationFrame(loop);
-  (window as never as { __lotp: unknown }).__lotp = { get state() { return state; }, get proj() { return proj; }, get cam() { return cam; }, get S() { return S; } };
+  (window as never as { __lotp: unknown }).__lotp = { get state() { return state; }, get proj() { return proj; }, get cam() { return cam; }, get S() { return S; }, look(f: FloorId, x: number, y: number) { viewFloor = f; follow = false; panTo = null; cam.x = x * T; cam.y = y * T; hudDirty = true; } };
 }
 boot();

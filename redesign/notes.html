@@ -1,4 +1,49 @@
 <section>
+  <h3>Third pass: the house itself</h3>
+  <p class="lede">The upstairs and the basement were rebuilt from nothing. Before, each was five or three rooms stretched into tubes twenty tiles deep, hanging off one corridor and one staircase. Open the <strong>Map</strong> to see all three floors.</p>
+  <div class="facts">
+    <div><b>9 × 20</b><span>tiles: a guest bedroom before</span></div>
+    <div><b>9 × 8</b><span>tiles: the same bedroom now</span></div>
+    <div><b>10 → 18</b><span>rooms across the two rebuilt floors</span></div>
+    <div><b>2 → 4</b><span>staircases joining the storeys</span></div>
+  </div>
+  <div class="cols">
+    <div>
+      <h4>Upstairs: the private floor</h4>
+      <ul>
+        <li>Smaller than the ground floor and set in from the sides, with the roof below showing round it.</li>
+        <li>One gallery runs east to west with every door on it, so standing there shows you who goes where.</li>
+        <li>A staircase at each end: the old back stairs, and new front stairs up from the foyer.</li>
+        <li>Rooms pair up through connecting doors, so the gallery is never the only way round.</li>
+        <li>New rooms: a sewing room, a sunroom, and a bathroom of your own.</li>
+        <li>Your bedroom is the one deliberate dead end: a single door to bolt, with the cameras behind it.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>The basement: backstage</h4>
+      <ul>
+        <li>An L of service rooms that does not reach under the front of the house.</li>
+        <li>New service stairs drop from the kitchen into a cold store. The cellar stairs still drop from the back landing.</li>
+        <li>The rec room is the hub, with a door in each wall.</li>
+        <li>New rooms: cold store, laundry, wine cellar.</li>
+        <li>The hidden room now has two doors, one from the cold store and one from the wine cellar.</li>
+        <li>The walkout to the back lawn is where it was.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>What guided it</h4>
+      <ul>
+        <li><strong>Loops, not dead ends.</strong> Hitman and Dishonored designers say real floor plans are full of dead ends and games need loops, so nobody is ever trapped and there is always a second route.</li>
+        <li><strong>Public to private.</strong> Victorian houses separate social rooms, private rooms and service rooms. Here that is ground, upstairs and basement.</li>
+        <li><strong>A crowd with a backstage round it.</strong> The party is the public layer; the basement connects behind it.</li>
+        <li><strong>Rooms sized for what is in them.</strong> Every room has one furniture group and clear paths between its doors.</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:12px"><span class="tag warn">This one changes the game</span>Unlike the art, the layout lives in your game's own data, so this pass edits <code>src/data/floorplan.ts</code>, <code>floors.ts</code> and <code>initialState.ts</code>. The ground floor keeps every room and every piece of furniture; it only gains the two new stair heads. The game's own layout, stair and art checks all pass, and the original game builds and runs on the new house. Sources: <a href="https://www.pcgamer.com/the-making-of-sapienza-hitmans-best-level/2" target="_blank" rel="noopener">the making of Hitman's Sapienza</a>, <a href="https://azhdarchid.bearblog.dev/topology-of-hitman-levels/" target="_blank" rel="noopener">the topology of Hitman levels</a>, <a href="https://kotaku.com/a-closer-look-at-dishonored-2-s-clockwork-mansion-1789429571" target="_blank" rel="noopener">Dishonored 2's Clockwork Mansion</a>, read as search summaries.</p>
+</section>
+
+<section>
   <h3>Second pass: art, light and motion</h3>
   <p class="lede">Every character, piece of furniture, fixture, snack and emote was redrawn, and how people move and act was rebuilt. Press <strong>Art</strong> in the demo to see each old sprite beside its replacement.</p>
   <div class="cols">

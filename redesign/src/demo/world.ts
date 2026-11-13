@@ -53,6 +53,14 @@ const ROOM_FLOOR: Record<string, Style> = {
   'basement-landing': { type: 'concrete', a: hex('#8a878e') },
   'rec-room': { type: 'wood', a: hex('#8c6040') },
   'seans-crib': { type: 'carpet', a: hex('#4a4468') },
+  'front-stairs': { type: 'wood', a: hex('#a87244') },
+  gallery: { type: 'wood', a: hex('#9a6840') },
+  'master-bath': { type: 'smalltile', a: hex('#e8e2d2'), b: hex('#8f9cc0') },
+  'sewing-room': { type: 'wood', a: hex('#b98a56') },
+  sunroom: { type: 'checker', a: hex('#d8c9a0'), b: hex('#a9b58a') },
+  'cold-store': { type: 'smalltile', a: hex('#cfd6d8'), b: hex('#8d9aa0') },
+  laundry: { type: 'checker', a: hex('#dfe6e6'), b: hex('#9cc0c4') },
+  'wine-cellar': { type: 'pavers', a: hex('#8a7f78') },
 };
 
 interface Paper { base: string; alt: string; pat: 'stripe' | 'dot' | 'panel' | 'tile' | 'plain'; dado: string; rail: string }
@@ -78,6 +86,14 @@ const WALLPAPER: Record<string, Paper> = {
   'basement-landing': { base: '#77747c', alt: '#68656c', pat: 'tile', dado: '#55525a', rail: '#8a878e' },
   'rec-room': { base: '#8a6844', alt: '#775838', pat: 'panel', dado: '#4c3524', rail: '#b08a5c' },
   'seans-crib': { base: '#40406a', alt: '#d06aa8', pat: 'dot', dado: '#26263f', rail: '#6a6aa0' },
+  'front-stairs': { base: '#b08a5c', alt: '#9c784c', pat: 'panel', dado: WOOD_DADO, rail: WOOD_RAIL },
+  gallery: { base: '#7d4a52', alt: '#8e5a62', pat: 'stripe', dado: WOOD_DADO, rail: WOOD_RAIL },
+  'master-bath': { base: '#c9d0e6', alt: '#a8b2d2', pat: 'tile', dado: '#8f9cc0', rail: '#eef0fa' },
+  'sewing-room': { base: '#b8935a', alt: '#c8a36a', pat: 'dot', dado: WOOD_DADO, rail: WOOD_RAIL },
+  sunroom: { base: '#9fb88a', alt: '#b4ca9e', pat: 'stripe', dado: '#e2d9c6', rail: '#f4ecd8' },
+  'cold-store': { base: '#c4ccd0', alt: '#a4aeb4', pat: 'tile', dado: '#8d9aa0', rail: '#e6ecee' },
+  laundry: { base: '#cfe0e0', alt: '#a9c8c8', pat: 'tile', dado: '#9cc0c4', rail: '#f2fafa' },
+  'wine-cellar': { base: '#6a5a58', alt: '#5a4a48', pat: 'tile', dado: '#4a3c3a', rail: '#8a7a74' },
 };
 const DEFAULT_PAPER: Paper = { base: '#8a7868', alt: '#9a8878', pat: 'stripe', dado: WOOD_DADO, rail: WOOD_RAIL };
 
@@ -170,12 +186,39 @@ function texel(st: Style, px: number, py: number): RGB {
       if (star < 0.0035) return shade([235, 238, 255], 0.6 + 0.4 * h2(px, py, 22));
       return c;
     }
+    case 'roof': {
+      // the ground floor's roof, seen from the storey above
+      const row = Math.floor(py / 5), off = row & 1 ? 4 : 0;
+      let f = 0.9 + 0.14 * h2(Math.floor((px + off) / 8), row, 41);
+      if ((((py % 5) + 5) % 5) === 4) f *= 0.68; else if ((((px + off) % 8) + 8) % 8 === 0) f *= 0.8;
+      return shade(a, f);
+    }
+    case 'earth': {
+      let f = 0.86 + 0.2 * h2(px >> 1, py >> 1, 43);
+      if (h2(px >> 2, py >> 2, 44) < 0.05) f *= 1.5;
+      return shade(a, f);
+    }
     case 'void': return shade([20, 16, 26], 0.9 + 0.2 * h2(px >> 1, py >> 1, 23));
     default: return a;
   }
 }
 
+/** Solid wall with no room anywhere near it: on the smaller storeys this is not house at all. */
+export function isDeep(grid: Grid, floor: FloorId, x: number, ly: number): boolean {
+  if (floor === 'ground') return false;
+  const t = localTile(grid, floor, x, ly);
+  if (!t || t.kind !== 'wall') return false;
+  for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+    const n = localTile(grid, floor, x + dx, ly + dy);
+    if (n && n.kind !== 'wall') return false;
+  }
+  return true;
+}
+const ROOF: Style = { type: 'roof', a: hex('#7a5a66') };
+const EARTH: Style = { type: 'earth', a: hex('#5a4a44') };
+
 function styleFor(grid: Grid, floor: FloorId, x: number, ly: number): Style {
+  if (isDeep(grid, floor, x, ly)) return floor === 'upper' ? ROOF : EARTH;
   const tile = localTile(grid, floor, x, ly);
   if (tile) {
     if (tile.kind === 'yard' || tile.kind === 'path' || tile.kind === 'street' || tile.kind === 'door' || tile.kind === 'wall') return KIND_FLOOR[tile.kind]!;
@@ -200,7 +243,7 @@ export function buildLayer(grid: Grid, decor: readonly Decor[], floor: FloorId):
   const canvas = document.createElement('canvas');
   canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d')!;
-  const tl = (x: number, ly: number) => localTile(grid, floor, x, ly);
+  const tl = (x: number, ly: number) => (isDeep(grid, floor, x, ly) ? undefined : localTile(grid, floor, x, ly));
 
   // ---- 1. ground: every pixel gets a texel from its tile's material
   const cols = GW + PAD_L + PAD_R, rows = FH + PAD_T + PAD_B;
@@ -280,7 +323,7 @@ export function buildLayer(grid: Grid, decor: readonly Decor[], floor: FloorId):
     }
     if (!isWall(t)) continue;
 
-    const face = !isWall(s) && (s !== undefined || (floor !== 'ground'));
+    const face = !isWall(s) && (s !== undefined || (floor !== 'ground' && ly < FH - 1 && isDeep(grid, floor, x, ly + 1)));
     if (face) {
       const outside = isOut(s);
       if (outside) {
@@ -345,6 +388,7 @@ export function buildLayer(grid: Grid, decor: readonly Decor[], floor: FloorId):
     const t = tl(x, ly);
     let col = 'rgb(84,96,150)';
     if (t && !isOut(t)) col = 'rgb(164,150,172)';
+    else if (floor === 'upper') col = 'rgb(96,104,160)';
     else if (floor !== 'ground') col = 'rgb(70,64,92)';
     else if (ly <= -8) col = 'rgb(150,160,220)';
     actx.fillStyle = col;

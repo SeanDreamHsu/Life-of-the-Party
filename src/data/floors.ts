@@ -8,9 +8,9 @@ type Point = { x: number; y: number };
 /** Every storey is drawn on the same foundation, with one shared camera scale. */
 export const FLOOR_VIEW = { x: 0, y: 0, w: GRID_WIDTH, h: HOUSE_Y + STOREY_HEIGHT + 5 };
 export const FLOORS = [
-  { id: 'upper', level: 1, number: '02', name: 'Upper Floor', description: 'Bedrooms & bathroom', offset: STOREY_HEIGHT, bounds: FLOOR_VIEW },
+  { id: 'upper', level: 1, number: '02', name: 'Upper Floor', description: 'Bedrooms, gallery & sunroom', offset: STOREY_HEIGHT, bounds: FLOOR_VIEW },
   { id: 'ground', level: 0, number: '01', name: 'Ground Floor', description: 'Party rooms & garden', offset: 0, bounds: FLOOR_VIEW },
-  { id: 'basement', level: -1, number: 'B1', name: 'Basement', description: 'Basement & rec room', offset: STOREY_HEIGHT * 2, bounds: FLOOR_VIEW },
+  { id: 'basement', level: -1, number: 'B1', name: 'Basement', description: 'Rec room, cellars & walkout', offset: STOREY_HEIGHT * 2, bounds: FLOOR_VIEW },
 ] as const;
 
 export function floorInfo(id: FloorId) { return FLOORS.find(floor => floor.id === id) ?? FLOORS[1]; }
@@ -50,6 +50,9 @@ const at = (x: number, y: number): Point => ({ x: HOUSE_X + x, y: HOUSE_Y + y })
 const CONNECTIONS = [
   { id: 'main-stairs', a: at(24, 22), b: at(24, 47) },
   { id: 'cellar-stairs', a: at(27, 22), b: at(27, 72) },
+  // A second flight at each end of the house, so no storey hangs off one staircase.
+  { id: 'front-stairs', a: at(26, 1), b: at(26, 26) },
+  { id: 'service-stairs', a: at(52, 6), b: at(52, 56) },
   { id: 'walkout', a: at(12, 74), b: at(12, 75), walkout: true },
 ] as const;
 
