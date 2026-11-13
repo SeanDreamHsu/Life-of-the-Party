@@ -1,0 +1,154 @@
+<section>
+  <h3>Second pass: art, light and motion</h3>
+  <p class="lede">Every character, piece of furniture, fixture, snack and emote was redrawn, and how people move and act was rebuilt. Press <strong>Art</strong> in the demo to see each old sprite beside its replacement.</p>
+  <div class="cols">
+    <div>
+      <h4>Characters</h4>
+      <ul>
+        <li>One shared rig, three real views: toward you, away, and in profile. Before, walking sideways slid a front-facing sprite.</li>
+        <li>A four-frame walk in every view, timed to distance covered so feet do not slide.</li>
+        <li>New actions: reach, talk, shove, stumble, carry a plate, dance, wave goodbye.</li>
+        <li>Turning shows in posture as well as colour: slouch, then hunch, then arms out and lit eyes.</li>
+        <li>Hair, outfits and colours still come from your data, so nobody's identity changed.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Furniture and light</h4>
+      <ul>
+        <li>29 props redrawn with a top face and a front face, so a sofa reads as a sofa.</li>
+        <li>Lamps, fridge, speaker and surveillance desk look different when on. Candles, televisions, string lights and the disco ball animate.</li>
+        <li>Light stops at walls and spills through doorways. Before, a lamp lit the next room through the wall.</li>
+        <li>Lit parts glow over the night: shades, screens, flames, the open fridge.</li>
+        <li>Real doors that swing open as someone passes, and show a bolt when locked.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Movement and interaction</h4>
+      <ul>
+        <li>The host walks over and performs each job. The lamp comes on when the hand reaches it, not when you click.</li>
+        <li>A shoved guest stumbles back with a puff of dust. A talked-to guest answers.</li>
+        <li>Guests walk by condition: tipsy ones weave, mutating ones drag, feral ones scuttle.</li>
+        <li>Idle guests look around. Whoever is speaking gestures.</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:12px"><span class="tag">Method</span>Ramps shift hue as they darken (shadows toward violet, highlights toward yellow), light always comes from the upper left, and outlines take the colour of what they enclose. For walk mechanics I studied the open-licensed Liberated Pixel Cup walk sheets, the one reference set this workspace could actually download and look at; nothing was copied from it. Other technique notes came from search summaries of <a href="https://www.slynyrd.com/blog/2018/1/10/pixelblog-1-color-palettes" target="_blank" rel="noopener">Pixelblog on colour ramps</a>, <a href="https://www.slynyrd.com/blog/2019/10/21/pixelblog-22-top-down-character-sprites" target="_blank" rel="noopener">top-down character sprites</a> and <a href="https://www.slynyrd.com/blog/2019/9/18/pixelblog-21-top-down-objects" target="_blank" rel="noopener">top-down objects</a>.</p>
+  <p><span class="tag warn">Not done</span>Rugs and floor textures were left as they were. The sprites are drawn by code in <code>redesign/src/art</code>; they are not yet exported into the game's own sprite files.</p>
+</section>
+
+<section>
+  <h3>What this demo is</h3>
+  <p class="lede">The same game with a different face. The demo runs your real rules, your real house layout, your cast and your sprites, imported straight from <code>src/</code>. Only the presentation is new: how the house is drawn, where the camera sits, and how you give orders.</p>
+  <p>Nothing in your repository was changed. This page is a separate file.</p>
+  <div class="keys">
+    <span><kbd>Click</kbd>walk or use</span><span><kbd>W A S D</kbd>step</span><span><kbd>1–5</kbd>tools</span><span><kbd>Z</kbd>undo</span><span><kbd>Enter</kbd>end hour</span><span><kbd>M</kbd>map</span><span><kbd>J</kbd>log</span><span><kbd>F</kbd>back to you</span><span><kbd>E</kbd>stairs</span><span><kbd>Drag</kbd>look around</span><span><kbd>Wheel</kbd>zoom</span>
+  </div>
+</section>
+
+<section>
+  <h3>Why it reads as an app today</h3>
+  <figure>
+    <img src="__BEFORE__" alt="The current game at 1440 by 900. The house is a small picture in the middle of a dark frame, surrounded by text panels.">
+    <figcaption>Your current build, first screen after the tutorial, at 1440 × 900.</figcaption>
+  </figure>
+  <div class="facts">
+    <div><b>12%</b><span>of the screen is the house at the default view</span></div>
+    <div><b>16 px</b><span>height of a guest at that view</span></div>
+    <div><b>6 + 8</b><span>text panels and top-bar controls always on screen</span></div>
+    <div><b>3</b><span>fixed zoom steps, none of which follow you</span></div>
+  </div>
+  <ul>
+    <li><strong>The world is a thumbnail.</strong> The play area is a window inside a dashboard, and the house is a smaller picture inside that window. At 16 pixels tall you cannot read a face, a mood or how far someone has turned, so the game has to tell you in a sidebar instead.</li>
+    <li><strong>Everything is written, nothing is shown.</strong> Time, suspicion, your plan and every guest's state are sentences in panels. The panels use small-caps serif type, which is how websites look, and the art is pixel art. Two styles on one screen.</li>
+    <li><strong>The walls are flat.</strong> The house is drawn from directly above, like a floor plan, with walls as black bands. The furniture and people are drawn from the front. The two views disagree, so rooms look like diagrams.</li>
+    <li><strong>Every room has the same floor.</strong> The same brown brick runs through the lounge, hall, study and ballroom, so you tell rooms apart by reading nameplates.</li>
+    <li><strong>Nothing exists outside the walls.</strong> The neighbours are the reason suspicion exists, and they are not on screen. The lawn is one flat green.</li>
+    <li><strong>You operate it like a form.</strong> Pick a floor from a list, pick a room from a dropdown, click the tile next to you, choose from a menu. Walking across a room is many separate clicks.</li>
+  </ul>
+</section>
+
+<section>
+  <h3>What I studied, and what I took from each</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Game or source</th><th>What it does</th><th>What the demo borrows</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Stardew Valley</strong><br>map and HUD</td><td>The world fills the screen and the camera follows you. Tiles are 16 px drawn at about four times size. Rooms are seen at a three-quarter angle, so the back wall has a visible face with wallpaper and furniture sits against it. The HUD is a clock in one corner, a toolbar at the bottom, and nothing else until you open a menu. People talk in a box with their portrait.</td><td>Follow camera at a fixed whole-number zoom. Wall faces. One floor material and one wallpaper per room. Clock top right, toolbar bottom centre, portrait dialogue box. Map and log behind keys.</td></tr>
+        <tr><td><strong>Into the Breach</strong><br>turn-based clarity</td><td>Shows what will happen before you commit. Its designers reportedly spent about half of development on the interface, and Justin Ma is quoted: "we would sacrifice cool ideas for the sake of clarity every time."</td><td>Hover any tile to see the route and the minutes it costs before you click. Hover a guest with Talk or Shove to see which way they will be pushed. Planned suspicion blinks on the meter before you end the hour.</td></tr>
+        <tr><td><strong>Party Hard</strong><br>the same setting</td><td>A house party seen from above where the party is the level: a crowd, a dance floor, coloured light.</td><td>The speaker throws pulsing colour and music notes, the disco ball sweeps the ballroom, people dance near it.</td></tr>
+        <tr><td><strong>"Juice it or lose it"</strong><br>Jonasson and Purho, 2012</td><td>The same rules feel far better with layered feedback: movement easing, sound, particles, floating numbers, a little screen shake. Later writing warns against overdoing it.</td><td>Costs float up from where you act. Footsteps and small sounds. A shake only on a shove. Confetti when a guest finally leaves. Kept light, because this is a slow game.</td></tr>
+        <tr><td><strong>Diegetic interfaces</strong><br>Dead Space and others</td><td>A meter is stronger when it exists in the world, not only as a bar.</td><td>Suspicion is the windows across the street. Each light that comes on is a neighbour watching. Past 45% you can see them standing at the glass.</td></tr>
+        <tr><td><strong>Pixel-art interior guides</strong></td><td>Use one wall style for the whole building. Give walls a darker band that furniture can sit against. Decide what draws in front of what.</td><td>Every wall follows one rule. People and furniture are sorted by depth, so someone standing behind a sofa is behind it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px"><span class="tag warn">How far to trust this</span>This workspace could run web searches but could not open the articles themselves, so the quote and the figures above come from search summaries of these pages. The Stardew layout details are from my own knowledge of the game. Worth reading yourself:
+    <a href="https://gamedeveloper.com/design/-i-into-the-breach-i-dev-on-ui-design-sacrifice-cool-ideas-for-the-sake-of-clarity-every-time-" target="_blank" rel="noopener">Into the Breach on interface design</a>,
+    <a href="https://www.slynyrd.com/blog/2021/11/30/pixelblog-35-top-down-interiors" target="_blank" rel="noopener">Pixelblog: top-down interiors</a>,
+    <a href="https://limezu.itch.io/moderninteriors/devlog/209960/tutorial-how-to-walls" target="_blank" rel="noopener">LimeZu: how to draw walls</a>,
+    <a href="https://www.rpgmakerweb.com/blog/tutorial-mapping-interior" target="_blank" rel="noopener">RPG Maker: mapping interiors</a>,
+    <a href="https://gamejuice.pages.dev/articles/juice-it-or-lose-it-lessons" target="_blank" rel="noopener">lessons from "Juice it or lose it"</a>,
+    <a href="https://80.lv/articles/the-making-of-partd183-hard" target="_blank" rel="noopener">the making of Party Hard</a>,
+    <a href="https://www.wayline.io/blog/diegetic-interfaces-game-design" target="_blank" rel="noopener">diegetic interfaces</a>.</p>
+</section>
+
+<section>
+  <h3>What changed in the demo</h3>
+  <div class="cols">
+    <div>
+      <h4>The map</h4>
+      <ul>
+        <li>The house fills the screen. On a laptop a tile is 48 px and a person stands about 80 px tall.</li>
+        <li>The camera follows you. Zoom out twice to see the whole lot.</li>
+        <li>North walls have a face with wallpaper and panelling. Each room has its own paper and floor.</li>
+        <li>A street, four neighbours, streetlamps, a fence, flower beds, and party litter on the front lawn.</li>
+        <li>Rooms are lit by default. Lamps and candles add warm pools. Outdoors is night.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>The interface</h4>
+      <ul>
+        <li>Four corners: guests, clock and street, tools, End Hour.</li>
+        <li>The clock is the budget. Plan 23 minutes and it reads 12:23.</li>
+        <li>Guests are faces. The border colour is how far gone they are, the bar is agitation.</li>
+        <li>What people say arrives in a dialogue box with their portrait.</li>
+        <li>One map for all three floors replaces the floor list and the room dropdown.</li>
+        <li>A title screen and two endings.</li>
+        <li>Works on a phone.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>How it plays</h4>
+      <ul>
+        <li>Click anywhere to walk there. The route and its cost show first.</li>
+        <li>Pick a verb, then a target. You walk over and do it in one click.</li>
+        <li>One undo takes back one whole click.</li>
+        <li>End Hour plays out: the screen letterboxes, guests walk, the hour is announced.</li>
+        <li>When a new window lights, the camera glances at the street.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Gameplay problems I found while playing</h3>
+  <p>The demo does not fix these, because they change your rules and that is your decision.</p>
+  <ul>
+    <li><span class="tag warn">Biggest</span><strong>Guests take one step an hour. You take up to sixty.</strong> The house is 56 tiles wide and everyone is Feral by hour 18, so leading one guest from the ballroom to the street takes longer than the whole night. This is also why an hour feels like nothing happened. Letting guests walk four to six tiles an hour would make every End Hour visibly move the board.</li>
+    <li><strong>The real game has no ending.</strong> Suspicion stops at 100 and nothing happens. The demo adds simple win and lose screens to show the shape.</li>
+    <li><strong>Five of twelve guests cannot be lured outside.</strong> Every lamp and speaker is fixed indoors, so light-lovers and bass-lovers have nothing to follow to the door. Your own project report notes this. A carried lamp and a portable speaker would use the toolbar slots well.</li>
+    <li><strong>Suspicion only rises.</strong> There is no reward for a quiet hour or for getting someone home.</li>
+    <li><strong>Which way a push goes depends on where you stand,</strong> and the current game never shows it. The demo previews it.</li>
+  </ul>
+</section>
+
+<section>
+  <h3>Questions for you</h3>
+  <ol class="q">
+    <li><strong>Mood.</strong> The demo is brighter and warmer than your current build so rooms are readable. Keep this, go darker like the original, or go fully bright like Stardew in daytime?</li>
+    <li><strong>Guest speed.</strong> May I change the rules so guests walk several tiles an hour?</li>
+    <li><strong>Turns.</strong> The demo keeps "plan, then End Hour". Keep that, or try walking in real time with the clock running as you move?</li>
+    <li><strong>Devices.</strong> Is this a laptop game, or should phones count equally?</li>
+    <li><strong>How to build it.</strong> The demo draws everything on one canvas and leaves <code>src/game/</code> untouched. Should I replace the current board that way, or restyle the existing React board step by step?</li>
+  </ol>
+</section>

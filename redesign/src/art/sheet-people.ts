@@ -1,0 +1,31 @@
+/** Contact sheet for reviewing the cast: every guest, every view, every animation. */
+import { personSprite, PERSON_IDS, ANIM_FRAMES, type Anim, type View } from './people';
+import type { Sprite } from './pix';
+const Z = 5, CELL = 30, COLS = 13;
+const rows: [string, Sprite][][] = [];
+rows.push(PERSON_IDS.map((id) => [id.replace('guest-', ''), personSprite(id, 0, 'idle', 0, 'down')]));
+rows.push(PERSON_IDS.map((id) => ['side', personSprite(id, 0, 'idle', 0, 'side')]));
+rows.push(PERSON_IDS.map((id) => ['up', personSprite(id, 0, 'idle', 0, 'up')]));
+const walk: [string, Sprite][] = [];
+for (const v of ['down', 'side', 'up'] as View[]) for (let f = 0; f < 4; f += 1) walk.push([`walk ${v} ${f}`, personSprite('host', 0, 'walk', f, v)]);
+rows.push(walk);
+const acts: [string, Sprite][] = [];
+for (const a of ['dance', 'act', 'shove', 'talk', 'hurt', 'wave', 'carry'] as Anim[]) for (let f = 0; f < Math.min(2, ANIM_FRAMES[a]); f += 1) acts.push([`${a} ${f}`, personSprite('guest-priya', 0, a, f * 2 % ANIM_FRAMES[a], 'down')]);
+rows.push(acts.slice(0, 13));
+const side: [string, Sprite][] = [];
+for (const a of ['act', 'shove', 'talk', 'hurt', 'carry', 'dance'] as Anim[]) side.push([`${a} side`, personSprite('guest-teddy', 0, a, 0, 'side')]);
+for (const s of [0, 1, 2, 3]) side.push([`moss s${s}`, personSprite('guest-moss', s, 'idle', 0, 'down')]);
+for (const s of [2, 3]) side.push([`s${s} walk`, personSprite('guest-moss', s, 'walk', 0, 'side')]);
+side.push(['blink', personSprite('guest-roz', 0, 'idle', 0, 'down', true)]);
+rows.push(side);
+const cv = document.createElement('canvas');
+cv.width = COLS * CELL * Z; cv.height = rows.length * (CELL + 6) * Z;
+document.body.style.margin = '0'; document.body.appendChild(cv);
+const ctx = cv.getContext('2d')!; ctx.imageSmoothingEnabled = false;
+rows.forEach((row, r) => row.forEach(([name, s], i) => {
+  const x = i * CELL * Z, y = r * (CELL + 6) * Z;
+  ctx.fillStyle = ['#a87244', '#d9cdb6', '#566490', '#7a3a48'][r % 4]!; ctx.fillRect(x, y, CELL * Z, (CELL + 6) * Z);
+  ctx.drawImage(s.base, x - Z, y, s.w * Z, s.h * Z);
+  ctx.fillStyle = '#fff'; ctx.font = '12px monospace'; ctx.fillText(name, x + 4, y + (CELL + 4) * Z);
+}));
+(window as never as { done: boolean }).done = true;
