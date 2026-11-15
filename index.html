@@ -9,6 +9,14 @@
       content="A non-lethal, turn-based survival strategy game. Your house party has gone on for days, your guests are mutating, and you have to make leaving their idea."
     />
     <meta name="theme-color" content="#0d0a09" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Life of the Party" />
+    <meta
+      property="og:description"
+      content="Your house party has gone on for days and your guests are mutating. You cannot throw anyone out. Make leaving their idea."
+    />
+    <meta property="og:image" content="https://lotp-official.vercel.app/shots/street.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,10 +33,11 @@
         <span class="badge">α 0.7.5</span>
       </a>
       <ul>
-        <li><a href="#hour">The Hour</a></li>
-        <li><a href="#pull">The Pull</a></li>
-        <li><a href="#clock">The Clock</a></li>
+        <li><a href="#house">The House</a></li>
+        <li><a href="#hour">How it plays</a></li>
         <li><a href="#cast">The Cast</a></li>
+        <li><a href="#road">Roadmap</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
       <a class="btn btn-brass" href="./play/">Play the alpha</a>
     </header>
@@ -51,6 +60,7 @@
             <a class="btn btn-brass" href="./play/">Play the alpha</a>
             <a class="btn btn-ghost" href="#premise">See how it works</a>
           </div>
+          <p class="status">Free in your browser today · Steam release planned</p>
         </div>
 
         <div class="crowd" id="crowd" aria-hidden="true"></div>
@@ -93,6 +103,74 @@
             </div>
           </article>
         </div>
+      </section>
+
+      <!-- ======================================================= AT A GLANCE -->
+      <section class="section" id="glance" style="padding-top: 0">
+        <div class="glance">
+          <article class="fact plate" data-reveal>
+            <strong>12</strong>
+            <h3>guests, each written by hand</h3>
+            <p>Every one has a secret pull, a temper, and things to say about the others.</p>
+          </article>
+          <article class="fact plate" data-reveal>
+            <strong>28</strong>
+            <h3>rooms on three floors</h3>
+            <p>A party floor, a private floor and a basement behind it all, joined by four staircases.</p>
+          </article>
+          <article class="fact plate" data-reveal>
+            <strong>60</strong>
+            <h3>minutes in every turn</h3>
+            <p>Walking, talking and switching things on all spend the same clock. Plan it, undo it, then commit.</p>
+          </article>
+          <article class="fact plate" data-reveal>
+            <strong>0</strong>
+            <h3>people harmed</h3>
+            <p>No weapons and no health bars. The house is your only tool.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ======================================================= THE HOUSE -->
+      <section class="section" id="house">
+        <div class="section-head">
+          <p class="kicker">The house</p>
+          <h2>One long night, <em>one whole street watching.</em></h2>
+          <p class="lede">
+            The party fills the ground floor. Upstairs is supposed to be private. The basement
+            is where the food and the back way out are. Across the road, every window that
+            lights up is a neighbour paying attention.
+          </p>
+        </div>
+        <figure class="shot shot-wide plate" data-reveal>
+          <img
+            src="/shots/street.jpg"
+            width="1280" height="720" loading="lazy"
+            alt="The whole lot at night: the party house seen from above with its rooms lit, the street in front, and neighbouring houses with one window lit."
+          />
+          <figcaption>The lot at midnight. One neighbour is already awake.</figcaption>
+        </figure>
+        <div class="shots">
+          <figure class="shot plate" data-reveal>
+            <img src="/shots/foyer.jpg" width="1280" height="720" loading="lazy"
+              alt="The foyer up close, with the host and two guests standing on a blue rug." />
+            <figcaption>Hour fifty-two, in the foyer.</figcaption>
+          </figure>
+          <figure class="shot plate" data-reveal>
+            <img src="/shots/planning.jpg" width="1280" height="720" loading="lazy"
+              alt="The host in the main hall with a dotted route drawn along the carpet and a label reading Walk, 21 minutes." />
+            <figcaption>Every route shows what it costs before you commit.</figcaption>
+          </figure>
+          <figure class="shot plate" data-reveal>
+            <img src="/shots/upstairs.jpg" width="1280" height="720" loading="lazy"
+              alt="The upper floor: a long gallery with bedrooms, a sewing room and a sunroom opening off it." />
+            <figcaption>Upstairs: a gallery, and every door on it.</figcaption>
+          </figure>
+        </div>
+        <p class="shot-note">
+          These show the new look, which is still being built. The playable alpha has the same
+          house and rules in its older style.
+        </p>
       </section>
 
       <!-- ======================================================== THE HOUR -->
@@ -267,39 +345,78 @@
       <section class="section" id="road">
         <div class="section-head">
           <p class="kicker">07 · Where it's going</p>
-          <h2>Built in the open. <em>Headed for Steam.</em></h2>
+          <h2>Playable now. <em>Headed for Steam.</em></h2>
         </div>
         <div class="road" id="roadmap">
           <i class="road-line" id="roadLine" aria-hidden="true"></i>
           <article class="stop plate now" data-reveal>
-            <p class="kicker" style="margin-bottom: 0.4rem">Now · Alpha v0.7.5</p>
-            <h3>Phase 1 — The web prototype</h3>
+            <p class="kicker" style="margin-bottom: 0.4rem">Playable now · Alpha v0.7.5</p>
+            <h3>The web alpha</h3>
             <p>
-              The economy, the AI and the house, dialled in with hot reload instead of fighting
-              an engine. Twelve guests, twenty rooms across three floors, a 68×35 lot,
-              simultaneous turn resolution and BFS pathfinding.
+              The full house, all twelve guests, the minute clock, the lures and the cameras.
+              It runs in a desktop browser and costs nothing. It has no ending and no save yet,
+              so a run lasts as long as you keep the tab open.
             </p>
-            <div class="chips">
-              <span>React 19</span><span>TypeScript</span><span>Vite</span
-              ><span>Tailwind 4</span><span>Zero image files</span>
-            </div>
+          </article>
+          <article class="stop plate" data-reveal>
+            <p class="kicker" style="margin-bottom: 0.4rem">In progress</p>
+            <h3>The new look</h3>
+            <p>
+              A camera that follows you through the house, redrawn characters and furniture,
+              light that stops at walls, and a street full of neighbours. The pictures above
+              are from it.
+            </p>
           </article>
           <article class="stop plate" data-reveal>
             <p class="kicker" style="margin-bottom: 0.4rem">Next</p>
             <h3>Closing the loop</h3>
             <p>
-              The endgame screens, the Pantry Reserve, injury as a real consequence, save and
-              resume — and, in a game about a speaker, sound.
+              Win and lose screens, the Pantry Reserve, injury as a real consequence, save and
+              resume, and sound, in a game about a speaker.
             </p>
           </article>
           <article class="stop plate" data-reveal>
-            <p class="kicker" style="margin-bottom: 0.4rem">Later</p>
-            <h3>Phase 2 — The commercial build</h3>
+            <p class="kicker" style="margin-bottom: 0.4rem">Then</p>
+            <h3>Steam</h3>
             <p>
-              The proven logic moves to Godot, with native 2D tilemaps, for a pixel-perfect Steam
-              release.
+              A desktop build and a store page. There is no date yet. When the store page
+              exists, the wishlist button will be at the top of this one.
             </p>
           </article>
+        </div>
+      </section>
+
+      <!-- ============================================================= FAQ -->
+      <section class="section" id="faq">
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2>Before you <em>let yourself in.</em></h2>
+        </div>
+        <div class="faq">
+          <details class="plate" data-reveal>
+            <summary>Is it free?</summary>
+            <p>The web alpha is free and needs no account. Pricing for the Steam release has not been decided.</p>
+          </details>
+          <details class="plate" data-reveal>
+            <summary>What do I need to play?</summary>
+            <p>A laptop or desktop with a current browser, a mouse and a keyboard. The alpha is not built for phones.</p>
+          </details>
+          <details class="plate" data-reveal>
+            <summary>How finished is it?</summary>
+            <p>The house, the guests and the rules are all there and playable. There is no win or lose screen, no sound and no saved game yet, and reloading starts the night again.</p>
+          </details>
+          <details class="plate" data-reveal>
+            <summary>When is it on Steam?</summary>
+            <p>No date yet. The roadmap above is the order things happen in.</p>
+          </details>
+          <details class="plate" data-reveal>
+            <summary>How do I tell you what I think?</summary>
+            <p>Inside the game, the Playtest feedback button collects your notes with the state of your run. Copy or download the report and send it to whoever gave you the link. Nothing is sent automatically.</p>
+          </details>
+          <details class="plate" data-reveal>
+            <summary>Is anyone actually hurt?</summary>
+            <p>No. You cannot attack anyone. The worst thing you can do is shove somebody, and the game treats that as the mistake it is.</p>
+          </details>
         </div>
       </section>
 
@@ -309,16 +426,17 @@
         <h2 class="h2">The party is <em>still going.</em></h2>
         <div class="cta">
           <a class="btn btn-brass" href="./play/">Play the alpha</a>
-          <a class="btn btn-ghost" href="https://github.com/SeanDreamHsu/Life-of-the-Party"
-            >Read the source</a
-          >
+          <a class="btn btn-ghost" href="#road">See what's next</a>
         </div>
         <div class="crowd" id="crowd2" aria-hidden="true"></div>
       </section>
     </main>
 
     <footer class="foot">
-      <span>Life of the Party · alpha v0.7.5 · MIT licensed</span>
+      <span>
+        Life of the Party · alpha v0.7.5 ·
+        <a href="https://github.com/SeanDreamHsu/Life-of-the-Party">Source on GitHub</a> · MIT licensed
+      </span>
       <span>Nobody was harmed in the making of this party. That's the rule.</span>
     </footer>
 
